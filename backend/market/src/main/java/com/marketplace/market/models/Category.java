@@ -12,7 +12,7 @@ public class Category {
     private int id;
 
     private String name;
-    
+
     private boolean isTaxApplicable;
 
     public int getId() {
@@ -31,11 +31,11 @@ public class Category {
         this.name = name;
     }
 
-    public boolean isTaxApplicable() {
+    public boolean getIsTaxApplicable() {
         return isTaxApplicable;
     }
 
-    public void setTaxApplicable(boolean isTaxApplicable) {
+    public void setIsTaxApplicable(boolean isTaxApplicable) {
         this.isTaxApplicable = isTaxApplicable;
     }
 

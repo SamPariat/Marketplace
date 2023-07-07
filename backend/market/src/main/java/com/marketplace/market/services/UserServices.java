@@ -1,9 +1,20 @@
 package com.marketplace.market.services;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.marketplace.market.models.User;
 
-public interface UserServices extends JpaRepository<User, Integer> {
+import jakarta.transaction.Transactional;
 
+@Repository
+@Transactional
+public interface UserServices extends JpaRepository<User, Integer> {
+    @Modifying
+    @Query("UPDATE User u SET u.email = :email, u.password = :password, u.name = :name, u.role = :role WHERE u.id = :id")
+    void updateUserById(@Param("id") int id, @Param("email") String email, @Param("password") String password,
+            @Param("name") String name, @Param("role") int role);
 }

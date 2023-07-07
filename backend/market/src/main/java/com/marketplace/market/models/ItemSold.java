@@ -14,11 +14,11 @@ public class ItemSold {
     private int id;
 
     private String name;
-    
+
     private int quantity;
-    
+
     private int soldBy;
-    
+
     private Timestamp timestamp;
 
     public int getId() {

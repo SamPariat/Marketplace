@@ -1,63 +1,186 @@
 package com.marketplace.market.controllers;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.marketplace.market.models.Category;
+import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.models.Item;
 import com.marketplace.market.services.ItemServices;
+import com.marketplace.market.services.CategoryServices;
 
 @RestController
+@RequestMapping(value = "/item")
 public class ItemController {
 
 	@Autowired
 	private ItemServices itemServices;
 
-	@GetMapping("/items")
-	public List<Item> getItems() {
+	@Autowired
+	private CategoryServices categoryServices;
 
-		return itemServices.findAll();
+	@GetMapping("/all")
+	public ResponseEntity<CustomResponse<List<Item>>> getItems() {
+		try {
+			List<Item> items = itemServices.findAll();
+
+			if (items.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new CustomResponse<List<Item>>(Collections.emptyList(),
+								"No items have been added.",
+								null));
+			}
+
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new CustomResponse<List<Item>>(items, "All items found successfully.", null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<List<Item>>(null,
+					"Some error occurred while fetching the items.", e.getMessage()));
+		}
 	}
 
-	@PostMapping("/addItem")
-	public Item addItem(@RequestBody Item item) {
+	@GetMapping("/{itemId}")
+	public ResponseEntity<CustomResponse<Item>> getItemById(@PathVariable("itemId") int itemId) {
+		try {
+			Optional<Item> item = itemServices.findById(itemId);
 
-		itemServices.save(item);
-		return item;
+			if (!item.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new CustomResponse<Item>(null, null, "Requested item does not exist."));
+			}
+
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new CustomResponse<Item>(item.get(), "Item found successfully.", null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new CustomResponse<Item>(null, "Some error occurred while getting the item.",
+							e.getMessage()));
+		}
 	}
 
-	@GetMapping("/item/{itemId}")
-	public Item getItemById(@PathVariable Integer itemId) {
+	@GetMapping("")
+	public ResponseEntity<CustomResponse<List<Item>>> getItemsByName(@RequestParam("name") String name) {
+		try {
+			List<Item> itemsByName = itemServices.findByNameEquals(name);
+			System.out.println(itemsByName);
 
-		Item item = itemServices.findById(itemId).orElse(null);
-		return item;
+			if (itemsByName.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new CustomResponse<List<Item>>(Collections.emptyList(),
+								"No items with the name " + name + " have been added.",
+								null));
+			}
+
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new CustomResponse<List<Item>>(itemsByName,
+							"All items with name " + name + " found successfully.",
+							null));
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new CustomResponse<List<Item>>(null, "Some error occurred while getting the item(s).",
+							e.getMessage()));
+		}
 	}
 
-	@DeleteMapping("/deleteItem/{itemId}")
-	public String deleteItem(@PathVariable Integer itemId) {
+	@PostMapping("/add-item")
+	public ResponseEntity<CustomResponse<Item>> addItem(@RequestBody Item item) {
+		try {
+			int categoryId = item.getCategoryId();
 
-		itemServices.deleteById(itemId);
-		return "Item deleted";
+			Optional<Category> category = categoryServices.findById(categoryId);
+
+			if (!category.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new CustomResponse<Item>(null, null, "Category with entered id does not exist."));
+			}
+
+			itemServices.save(item);
+
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(new CustomResponse<Item>(item, "Created item that references " + category, null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new CustomResponse<Item>(null, "Some error occurred while adding the new item.",
+							e.getMessage()));
+		}
 	}
 
-	@PutMapping("/updateItem")
-	public Item updateItem(@RequestBody Item item) {
+	@DeleteMapping("/delete-item/{itemId}")
+	public ResponseEntity<CustomResponse<Item>> deleteItem(@PathVariable("itemId") int itemId) {
+		try {
+			Optional<Item> existingItem = itemServices.findById(itemId);
 
-		itemServices.save(item);
-		return item;
+			if (!existingItem.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new CustomResponse<Item>(null, null, "Requested item does not exist."));
+			}
+
+			itemServices.deleteById(itemId);
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new CustomResponse<Item>(null, "Item deleted successfully.", null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new CustomResponse<Item>(null, "Some error occurred while deleting the user.",
+							e.getMessage()));
+		}
 	}
-	@GetMapping("/items/{name}")
-	public List<Item> getItemByName(@PathVariable String name) {
 
-		List<Item> items = itemServices.findByName(name);
-		return items;
-	}	
+	@PatchMapping("/update")
+	public ResponseEntity<CustomResponse<Item>> updateItem(@RequestBody Item item, @RequestParam("id") int itemId) {
+		try {
+			Optional<Item> existingItem = itemServices.findById(itemId);
+
+			if (!existingItem.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new CustomResponse<Item>(null, null, "Item with this id does not exist."));
+			}
+
+			int categoryId = item.getCategoryId();
+			Optional<Category> category = categoryServices.findById(categoryId);
+
+			if (!category.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new CustomResponse<Item>(null, null,
+								"Category with id " + categoryId + " does not exist."));
+			}
+
+			Item updatedItem = new Item(
+					itemId,
+					item.getName(),
+					item.getPrice(),
+					item.getStock(),
+					item.isActive(),
+					category.get(),
+					categoryId);
+
+			itemServices.updateItemById(itemId,
+					item.getName(),
+					item.getPrice(),
+					item.getStock(),
+					item.isActive());
+
+			return ResponseEntity.status(HttpStatus.OK).body(
+					new CustomResponse<Item>(updatedItem, "Item updated successfully.", null));
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+					new CustomResponse<Item>(null, "Some error occurred while updating the item.", e.getMessage()));
+		}
+	}
 
 }

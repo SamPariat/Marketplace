@@ -1,25 +1,25 @@
 package com.marketplace.market.models;
 
-public class CategoryResponse {
-    private Category category;
+public class CustomResponse<T> {
+    private T data;
     private String message;
     private String error;
 
-    public CategoryResponse() {
+    public CustomResponse() {
     }
 
-    public CategoryResponse(Category category, String message, String error) {
-        this.category = category;
+    public CustomResponse(T data, String message, String error) {
+        this.data = data;
         this.message = message;
         this.error = error;
     }
 
-    public Category getCategory() {
-        return category;
+    public T getData() {
+        return data;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setData(T data) {
+        this.data = data;
     }
 
     public String getMessage() {
@@ -40,7 +40,7 @@ public class CategoryResponse {
 
     @Override
     public String toString() {
-        return "CategoryResponse [category=" + category + ", message=" + message + ", error=" + error + "]";
+        return "CustomResponse [data=" + data + ", message=" + message + ", error=" + error + "]";
     }
 
 }

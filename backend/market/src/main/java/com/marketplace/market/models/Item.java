@@ -1,9 +1,15 @@
 package com.marketplace.market.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Item {
@@ -11,23 +17,37 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	private int itemId;
-	private String name;
-	private int price;
 
-	public Item(int itemId, String name, int price, int stock, boolean isActive, int categoryId) {
-		super();
+	private String name;
+
+	private double price;
+
+	private int stock;
+
+	private boolean active;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "categoryId")
+	@JsonIgnore
+	private Category category;
+
+	@Transient
+	private int categoryId;
+
+	public Item(int itemId, String name, double price, int stock, boolean active, Category category, int categoryId) {
 		this.itemId = itemId;
 		this.name = name;
 		this.price = price;
 		this.stock = stock;
-		this.isActive = isActive;
+		this.active = active;
+		this.category = category;
 		this.categoryId = categoryId;
 	}
 
 	@Override
 	public String toString() {
-		return "Items [itemId=" + itemId + ", name=" + name + ", price=" + price + ", stock=" + stock + ", isActive="
-				+ isActive + ", categoryId=" + categoryId + "]";
+		return "Item [itemId=" + itemId + ", name=" + name + ", price=" + price + ", stock=" + stock + ", active="
+				+ active + ", category=" + category + ", categoryId=" + categoryId + "]";
 	}
 
 	public Item() {
@@ -50,11 +70,11 @@ public class Item {
 		this.name = name;
 	}
 
-	public int getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
@@ -66,12 +86,12 @@ public class Item {
 		this.stock = stock;
 	}
 
-	public boolean isActive() {
-		return isActive;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public int getCategoryId() {
@@ -82,8 +102,12 @@ public class Item {
 		this.categoryId = categoryId;
 	}
 
-	private int stock;
-	private boolean isActive;
-	private int categoryId;
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 }

@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class BillingTable {
@@ -21,7 +23,10 @@ public class BillingTable {
 	private int totalAmount;
 	private Timestamp timeStamp;
 	private int billerId;
-	private int itemId;
+
+	@ManyToOne
+	@JoinColumn(name = "itemId")
+	private Item item;
 
 	public int getBillId() {
 		return billId;
@@ -95,24 +100,23 @@ public class BillingTable {
 		this.billerId = billerId;
 	}
 
-	public int getItemId() {
-		return itemId;
+	public Item getItem() {
+		return item;
 	}
 
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 	public BillingTable() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String toString() {
 		return "BillingTable [billId=" + billId + ", serviceTax=" + serviceTax + ", cgst=" + cgst + ", sgst=" + sgst
 				+ ", discountPercentage=" + discountPercentage + ", discountAmount=" + discountAmount + ", totalAmount="
-				+ totalAmount + ", timeStamp=" + timeStamp + ", billerId=" + billerId + ", itemId=" + itemId + "]";
+				+ totalAmount + ", timeStamp=" + timeStamp + ", billerId=" + billerId + ", item=" + item + "]";
 	}
 
 }

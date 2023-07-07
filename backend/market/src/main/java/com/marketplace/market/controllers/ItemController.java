@@ -37,6 +37,7 @@ public class ItemController {
 	public Item getItemById(@PathVariable Integer itemId) {
 
 		Item item = itemServices.findById(itemId).orElse(null);
+		System.out.println(item.getPrice());
 		return item;
 	}
 

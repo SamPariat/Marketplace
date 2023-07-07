@@ -1,11 +1,17 @@
 package com.marketplace.market.models;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class BillingTable {
@@ -13,15 +19,36 @@ public class BillingTable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	private int billId;
+	@Column(nullable = false, columnDefinition = "INT DEFAULT 9")
 	private int serviceTax;
+
+	@Column(nullable = false, columnDefinition = "INT DEFAULT 9")
 	private int cgst;
+
+	@Column(nullable = false, columnDefinition = "INT DEFAULT 9")
 	private int sgst;
+
+	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int discountPercentage;
+	
+	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int discountAmount;
 	private int totalAmount;
-	private Timestamp timeStamp;
+	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private LocalDateTime timeStamp;
 	private int billerId;
-	private int itemId;
+
+	@OneToMany(mappedBy = "billingTable", fetch = FetchType.EAGER)
+	private List<Item> items;
+	
+	public BillingTable() {
+        super();
+        this.serviceTax = 9;
+        this.cgst = 9;
+        this.sgst = 9;
+        this.discountPercentage = 0;
+        this.discountAmount = 0;
+    }
 
 	public int getBillId() {
 		return billId;
@@ -79,11 +106,11 @@ public class BillingTable {
 		this.totalAmount = totalAmount;
 	}
 
-	public Timestamp getTimeStamp() {
+	public LocalDateTime getTimeStamp() {
 		return timeStamp;
 	}
 
-	public void setTimeStamp(Timestamp timeStamp) {
+	public void setTimeStamp(LocalDateTime timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 
@@ -95,24 +122,13 @@ public class BillingTable {
 		this.billerId = billerId;
 	}
 
-	public int getItemId() {
-		return itemId;
+
+	public List<Item> getItems() {
+		return items;
 	}
 
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
-	}
-
-	public BillingTable() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public String toString() {
-		return "BillingTable [billId=" + billId + ", serviceTax=" + serviceTax + ", cgst=" + cgst + ", sgst=" + sgst
-				+ ", discountPercentage=" + discountPercentage + ", discountAmount=" + discountAmount + ", totalAmount="
-				+ totalAmount + ", timeStamp=" + timeStamp + ", billerId=" + billerId + ", itemId=" + itemId + "]";
+	public void setItems(List<Item> items) {
+		this.items = items;
 	}
 
 }

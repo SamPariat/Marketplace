@@ -1,9 +1,13 @@
 package com.marketplace.market.models;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Item {
@@ -13,21 +17,47 @@ public class Item {
 	private int itemId;
 	private String name;
 	private int price;
+	private int discountPer;
+	private int discountPrice;
+	private int stock;
+	private boolean isActive;
+	private int categoryId;
 
-	public Item(int itemId, String name, int price, int stock, boolean isActive, int categoryId) {
-		super();
-		this.itemId = itemId;
-		this.name = name;
-		this.price = price;
-		this.stock = stock;
-		this.isActive = isActive;
-		this.categoryId = categoryId;
+	public int getDiscountPer() {
+		return discountPer;
 	}
+
+	public void setDiscountPer(int discountPer) {
+		this.discountPer = discountPer;
+	}
+
+	public int getDiscountPrice() {
+		return discountPrice;
+	}
+
+	public void setDiscountPrice(int discountPrice) {
+		this.discountPrice = discountPrice;
+	}
+
+	@ManyToOne
+    @JoinColumn(name = "billingTable_id")
+    private BillingTable billingTable;
+		
+	public BillingTable getBillingTable() {
+		return billingTable;
+	}
+
+	
 
 	@Override
 	public String toString() {
-		return "Items [itemId=" + itemId + ", name=" + name + ", price=" + price + ", stock=" + stock + ", isActive="
-				+ isActive + ", categoryId=" + categoryId + "]";
+		return "Item [itemId=" + itemId + ", name=" + name + ", price=" + price + ", discountPer=" + discountPer
+				+ ", discountPrice=" + discountPrice + ", billingTable=" + billingTable + ", stock=" + stock
+				+ ", isActive=" + isActive + ", categoryId=" + categoryId + "]";
+	}
+
+	public void setBillingTable(BillingTable billingTable) {
+		this.billingTable = billingTable;
 	}
 
 	public Item() {
@@ -82,8 +112,5 @@ public class Item {
 		this.categoryId = categoryId;
 	}
 
-	private int stock;
-	private boolean isActive;
-	private int categoryId;
 
 }

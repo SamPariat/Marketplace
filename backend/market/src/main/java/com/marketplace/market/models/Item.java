@@ -26,10 +26,18 @@ public class Item {
 
 	private boolean active;
 
+	private int discountPer;
+
+	private int discountPrice;
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "categoryId")
 	@JsonIgnore
 	private Category category;
+
+	@ManyToOne
+	@JoinColumn(name = "billingTable_id")
+	private BillingTable billingTable;
 
 	@Transient
 	private int categoryId;
@@ -44,10 +52,28 @@ public class Item {
 		this.categoryId = categoryId;
 	}
 
-	@Override
-	public String toString() {
-		return "Item [itemId=" + itemId + ", name=" + name + ", price=" + price + ", stock=" + stock + ", active="
-				+ active + ", category=" + category + ", categoryId=" + categoryId + "]";
+	public int getDiscountPer() {
+		return discountPer;
+	}
+
+	public void setDiscountPer(int discountPer) {
+		this.discountPer = discountPer;
+	}
+
+	public int getDiscountPrice() {
+		return discountPrice;
+	}
+
+	public void setDiscountPrice(int discountPrice) {
+		this.discountPrice = discountPrice;
+	}
+
+	public BillingTable getBillingTable() {
+		return billingTable;
+	}
+
+	public void setBillingTable(BillingTable billingTable) {
+		this.billingTable = billingTable;
 	}
 
 	public Item() {

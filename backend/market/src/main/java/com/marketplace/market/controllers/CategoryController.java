@@ -26,7 +26,7 @@ public class CategoryController {
     @Autowired
     private CategoryServices categoryServices;
 
-    @GetMapping(path = "")
+    @GetMapping(path = "/all")
     public ResponseEntity<CustomResponse<List<Category>>> getAllCategories() {
         try {
             List<Category> categories = categoryServices.findAll();

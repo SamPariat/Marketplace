@@ -78,8 +78,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(path = "/delete/{userId}")
-    public ResponseEntity<CustomResponse<User>> deleteByUserId(@PathVariable("userId") int userId) {
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<CustomResponse<User>> deleteByUserId(@RequestParam("id") int userId) {
         try {
             Optional<User> user = userServices.findById(userId);
 

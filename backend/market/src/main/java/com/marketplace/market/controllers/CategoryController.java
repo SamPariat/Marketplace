@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marketplace.market.models.Category;
@@ -78,8 +79,8 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping(path = "/delete/{categoryId}")
-    public ResponseEntity<CustomResponse<Category>> deleteCategory(@PathVariable("categoryId") int categoryId) {
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<CustomResponse<Category>> deleteCategory(@RequestParam("id") int categoryId) {
         try {
             Optional<Category> category = categoryServices.findById(categoryId);
 
@@ -98,9 +99,9 @@ public class CategoryController {
         }
     }
 
-    @PatchMapping(path = "/update/{categoryId}")
+    @PatchMapping(path = "/update")
     public ResponseEntity<CustomResponse<Category>> updateCategory(@RequestBody Category category,
-            @PathVariable("categoryId") int categoryId) {
+            @RequestParam("id") int categoryId) {
         try {
             Optional<Category> existingCategory = categoryServices.findById(categoryId);
 

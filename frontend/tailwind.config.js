@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        "sans-serif": ["Exo"],
+        raleway: ["Raleway", "sans-serif"],
+        exo: ["Exo", "sans-serif"],
       },
     },
   },

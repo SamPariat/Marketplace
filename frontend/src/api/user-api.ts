@@ -1,15 +1,10 @@
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 
 import { axiosInstance } from "./axios-config";
 
 import type { CustomResponse } from "../types/custom-response";
 import type { User } from "../types/user";
-
-const generateError = (errorResponse: AxiosResponse): string => {
-  return errorResponse?.data.message
-    ? `${errorResponse?.data.message}: ${errorResponse?.data.error}`
-    : errorResponse?.data.error;
-};
+import { generateError } from "../utils";
 
 export const getAllUsers = async (): Promise<CustomResponse<Array<User>>> => {
   try {

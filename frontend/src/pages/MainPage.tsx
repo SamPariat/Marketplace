@@ -1,5 +1,11 @@
+import SideBar from "../components/navbar/SideBar";
+
 const MainPage = () => {
-  return <div></div>;
+  return (
+    <>
+      <SideBar />
+    </>
+  );
 };
 
 export default MainPage;

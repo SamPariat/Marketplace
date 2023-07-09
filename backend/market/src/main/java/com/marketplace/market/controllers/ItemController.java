@@ -120,8 +120,8 @@ public class ItemController {
 		}
 	}
 
-	@DeleteMapping("/delete-item/{itemId}")
-	public ResponseEntity<CustomResponse<Item>> deleteItem(@PathVariable("itemId") int itemId) {
+	@DeleteMapping("/delete-item")
+	public ResponseEntity<CustomResponse<Item>> deleteItem(@RequestParam("id") int itemId) {
 		try {
 			Optional<Item> existingItem = itemServices.findById(itemId);
 

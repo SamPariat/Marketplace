@@ -1,13 +1,15 @@
 package com.marketplace.market.models;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Item {
@@ -15,13 +17,44 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	private int itemId;
+
 	private String name;
-	private int price;
-	private int discountPer;
-	private int discountPrice;
+
+	private double price;
+
 	private int stock;
-	private boolean isActive;
+
+	private boolean active;
+
+	private int discountPer;
+
+	private int discountPrice;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "categoryId")
+	@JsonIgnore
+	private Category category;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "billingTable_id")
+	private BillingTable billingTable;
+
+	@Transient
 	private int categoryId;
+	
+	@Transient
+	private int billingTable_id;
+
+
+	public Item(int itemId, String name, double price, int stock, boolean active, Category category, int categoryId) {
+		this.itemId = itemId;
+		this.name = name;
+		this.price = price;
+		this.stock = stock;
+		this.active = active;
+		this.category = category;
+		this.categoryId = categoryId;
+	}
 
 	public int getDiscountPer() {
 		return discountPer;
@@ -39,21 +72,8 @@ public class Item {
 		this.discountPrice = discountPrice;
 	}
 
-	@ManyToOne
-    @JoinColumn(name = "billingTable_id")
-    private BillingTable billingTable;
-		
 	public BillingTable getBillingTable() {
 		return billingTable;
-	}
-
-	
-
-	@Override
-	public String toString() {
-		return "Item [itemId=" + itemId + ", name=" + name + ", price=" + price + ", discountPer=" + discountPer
-				+ ", discountPrice=" + discountPrice + ", billingTable=" + billingTable + ", stock=" + stock
-				+ ", isActive=" + isActive + ", categoryId=" + categoryId + "]";
 	}
 
 	public void setBillingTable(BillingTable billingTable) {
@@ -80,11 +100,11 @@ public class Item {
 		this.name = name;
 	}
 
-	public int getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
@@ -96,12 +116,12 @@ public class Item {
 		this.stock = stock;
 	}
 
-	public boolean isActive() {
-		return isActive;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public int getCategoryId() {
@@ -112,5 +132,12 @@ public class Item {
 		this.categoryId = categoryId;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 }

@@ -1,5 +1,6 @@
 package com.marketplace.market.controllers;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marketplace.market.models.User;
-import com.marketplace.market.models.UserResponse;
+import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.services.UserServices;
 
 @RestController
@@ -26,72 +28,84 @@ public class UserController {
     private UserServices userServices;
 
     @GetMapping(path = "")
-    public List<User> getAllUsers() {
-        return userServices.findAll();
+    public ResponseEntity<CustomResponse<List<User>>> getAllUsers() {
+        try {
+            List<User> users = userServices.findAll();
+
+            if (users.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new CustomResponse<List<User>>(Collections.emptyList(), "No users have been added.",
+                                null));
+            }
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new CustomResponse<List<User>>(users, "All users found successfully.", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<List<User>>(null,
+                    "Some error occurred while fetching the users.", e.getMessage()));
+        }
     }
 
     @GetMapping(path = "/{userId}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable("userId") int userId) {
+    public ResponseEntity<CustomResponse<User>> getUser(@PathVariable("userId") int userId) {
         try {
             Optional<User> user = userServices.findById(userId);
 
             if (!user.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new UserResponse(null, null, "Requested user does not exist."));
+                        .body(new CustomResponse<User>(null, null, "Requested user does not exist."));
             }
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new UserResponse(user.get(), "User found successfully.", null));
+                    .body(new CustomResponse<User>(user.get(), "User found successfully.", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new UserResponse(null, "Some error occurred while getting the user.", e.getMessage()));
+                    .body(new CustomResponse<User>(null, "Some error occurred while getting the user.",
+                            e.getMessage()));
         }
     }
 
     @PostMapping(path = "/signup")
-    public ResponseEntity<UserResponse> signup(@RequestBody User user) {
+    public ResponseEntity<CustomResponse<User>> signup(@RequestBody User user) {
         try {
             userServices.save(user);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new UserResponse(user, "Successfully signed up the user.", null));
+                    .body(new CustomResponse<User>(user, "Successfully signed up the user.", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new UserResponse(null, "Some error occurred while signing up the user.", e.getMessage()));
+                    .body(new CustomResponse<User>(null, "Some error occurred while signing up the user.",
+                            e.getMessage()));
         }
     }
 
-    @DeleteMapping(path = "/delete-all")
-    public void deleteAllUsers(@RequestBody User user) {
-        userServices.deleteAll();
-    }
-
     @DeleteMapping(path = "/delete/{userId}")
-    public ResponseEntity<UserResponse> deleteByUserId(@PathVariable("userId") int userId) {
+    public ResponseEntity<CustomResponse<User>> deleteByUserId(@PathVariable("userId") int userId) {
         try {
             Optional<User> user = userServices.findById(userId);
 
             if (!user.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new UserResponse(null, null, "Requested user does not exist."));
+                        .body(new CustomResponse<User>(null, null, "Requested user does not exist."));
             }
 
             userServices.deleteById(userId);
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new UserResponse(user.get(), "Successfully deleted the user.", null));
+                    .body(new CustomResponse<User>(user.get(), "Successfully deleted the user.", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new UserResponse(null, "Some error occurred while deleting the user.", e.getMessage()));
+                    .body(new CustomResponse<User>(null, "Some error occurred while deleting the user.",
+                            e.getMessage()));
         }
     }
 
-    @PatchMapping(path = "/update/{userId}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable("userId") int userId, @RequestBody User user) {
+    @PatchMapping(path = "/update")
+    public ResponseEntity<CustomResponse<User>> updateUser(@RequestParam("id") int userId, @RequestBody User user) {
         try {
             Optional<User> existingUser = userServices.findById(userId);
 
             if (!existingUser.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new UserResponse(null, null, "Requested user does not exist."));
+                        .body(new CustomResponse<User>(null, null, "Requested user does not exist."));
             }
 
             userServices.updateUserById(userId, user.getEmail(), user.getPassword(), user.getName(), user.getRole());
@@ -104,10 +118,10 @@ public class UserController {
                     user.getRole());
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new UserResponse(updatedUser, "Updated user successfully.", null));
+                    .body(new CustomResponse<User>(updatedUser, "Updated user successfully.", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new UserResponse(null, "Some error occurred while updating.", e.getMessage()));
+                    .body(new CustomResponse<User>(null, "Some error occurred while updating.", e.getMessage()));
         }
     }
 }

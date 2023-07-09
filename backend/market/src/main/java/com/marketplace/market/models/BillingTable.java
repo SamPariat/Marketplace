@@ -3,8 +3,6 @@ package com.marketplace.market.models;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,6 +17,7 @@ public class BillingTable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	private int billId;
+
 	@Column(nullable = false, columnDefinition = "INT DEFAULT 9")
 	private int serviceTax;
 
@@ -30,25 +29,31 @@ public class BillingTable {
 
 	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int discountPercentage;
-	
+
 	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int discountAmount;
+
 	private int totalAmount;
+
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime timeStamp;
+
 	private int billerId;
 
 	@OneToMany(mappedBy = "billingTable", fetch = FetchType.EAGER)
 	private List<Item> items;
-	
+
+	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
+	private int item_id;
+
 	public BillingTable() {
-        super();
-        this.serviceTax = 9;
-        this.cgst = 9;
-        this.sgst = 9;
-        this.discountPercentage = 0;
-        this.discountAmount = 0;
-    }
+		super();
+		this.serviceTax = 9;
+		this.cgst = 9;
+		this.sgst = 9;
+		this.discountPercentage = 0;
+		this.discountAmount = 0;
+	}
 
 	public int getBillId() {
 		return billId;
@@ -122,13 +127,20 @@ public class BillingTable {
 		this.billerId = billerId;
 	}
 
-
 	public List<Item> getItems() {
 		return items;
 	}
 
 	public void setItems(List<Item> items) {
 		this.items = items;
+	}
+
+	public int getItem_id() {
+		return item_id;
+	}
+
+	public void setItem_id(int item_id) {
+		this.item_id = item_id;
 	}
 
 }

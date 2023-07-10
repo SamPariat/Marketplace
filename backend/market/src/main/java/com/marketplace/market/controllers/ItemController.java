@@ -100,7 +100,7 @@ public class ItemController {
 	@PostMapping("/add-item")
 	public ResponseEntity<CustomResponse<Item>> addItem(@RequestBody Item item) {
 		try {
-			int categoryId = item.getCategoryId();
+			int categoryId = item.getCategory().getId();
 
 			Optional<Category> category = categoryServices.findById(categoryId);
 
@@ -109,7 +109,12 @@ public class ItemController {
 						.body(new CustomResponse<Item>(null, null, "Category with entered id does not exist."));
 			}
 
-			itemServices.save(item);
+			Item newItem = new Item(item.getItemId(), item.getName(), item.getPrice(), item.getStock(),
+					item.isActive(), item.getDiscountPer(), item.getDiscountPrice(), category.get());
+
+			System.out.println(newItem);
+
+			itemServices.save(newItem);
 
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(new CustomResponse<Item>(item, "Created item that references " + category, null));
@@ -150,7 +155,7 @@ public class ItemController {
 						.body(new CustomResponse<Item>(null, null, "Item with this id does not exist."));
 			}
 
-			int categoryId = item.getCategoryId();
+			int categoryId = item.getCategory().getId();
 			Optional<Category> category = categoryServices.findById(categoryId);
 
 			if (!category.isPresent()) {
@@ -159,14 +164,9 @@ public class ItemController {
 								"Category with id " + categoryId + " does not exist."));
 			}
 
-			Item updatedItem = new Item(
-					itemId,
-					item.getName(),
-					item.getPrice(),
-					item.getStock(),
+			Item updatedItem = new Item(item.getItemId(), item.getName(), item.getPrice(), item.getStock(),
 					item.isActive(),
-					category.get(),
-					categoryId);
+					item.getDiscountPer(), item.getDiscountPrice(), category.get());
 
 			itemServices.updateItemById(itemId,
 					item.getName(),

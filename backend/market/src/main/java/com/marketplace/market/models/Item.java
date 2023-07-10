@@ -1,15 +1,11 @@
 package com.marketplace.market.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Item {
@@ -30,54 +26,22 @@ public class Item {
 
 	private int discountPrice;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "categoryId")
-	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL)
 	private Category category;
 
-	@ManyToOne
-	@JoinColumn(name = "billingTable_id")
-	private BillingTable billingTable;
+	public Item() {
+	}
 
-	@Transient
-	private int categoryId;
-
-	public Item(int itemId, String name, double price, int stock, boolean active, Category category, int categoryId) {
+	public Item(int itemId, String name, double price, int stock, boolean active, int discountPer, int discountPrice,
+			Category category) {
 		this.itemId = itemId;
 		this.name = name;
 		this.price = price;
 		this.stock = stock;
 		this.active = active;
-		this.category = category;
-		this.categoryId = categoryId;
-	}
-
-	public int getDiscountPer() {
-		return discountPer;
-	}
-
-	public void setDiscountPer(int discountPer) {
 		this.discountPer = discountPer;
-	}
-
-	public int getDiscountPrice() {
-		return discountPrice;
-	}
-
-	public void setDiscountPrice(int discountPrice) {
 		this.discountPrice = discountPrice;
-	}
-
-	public BillingTable getBillingTable() {
-		return billingTable;
-	}
-
-	public void setBillingTable(BillingTable billingTable) {
-		this.billingTable = billingTable;
-	}
-
-	public Item() {
-		super();
+		this.category = category;
 	}
 
 	public int getItemId() {
@@ -112,6 +76,30 @@ public class Item {
 		this.stock = stock;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public int getDiscountPer() {
+		return discountPer;
+	}
+
+	public void setDiscountPer(int discountPer) {
+		this.discountPer = discountPer;
+	}
+
+	public int getDiscountPrice() {
+		return discountPrice;
+	}
+
+	public void setDiscountPrice(int discountPrice) {
+		this.discountPrice = discountPrice;
+	}
+
 	public Category getCategory() {
 		return category;
 	}
@@ -120,20 +108,11 @@ public class Item {
 		this.category = category;
 	}
 
-	public int getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
+	@Override
+	public String toString() {
+		return "Item [itemId=" + itemId + ", name=" + name + ", price=" + price + ", stock=" + stock + ", active="
+				+ active + ", discountPer=" + discountPer + ", discountPrice=" + discountPrice + ", category="
+				+ category + "]";
 	}
 
 }

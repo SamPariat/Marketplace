@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import { axiosInstance } from "./axios-config";
 
 import type { CustomResponse } from "../types/custom-response";
-import type { Item } from "../types/item";
+import type { Item, ItemRequest } from "../types/item";
 import { generateError } from "../utils";
 
 // TODO : Update ItemController for this file
@@ -57,8 +57,11 @@ export const getItemsByName = async (
   }
 };
 
-export const addItem = async (item: Item): Promise<CustomResponse<Item>> => {
-  const body: Item = {
+export const addItem = async (
+  item: Item,
+  categoryId: number
+): Promise<CustomResponse<Item>> => {
+  const body: ItemRequest = {
     itemId: item.itemId,
     name: item.name,
     price: item.price,
@@ -66,6 +69,9 @@ export const addItem = async (item: Item): Promise<CustomResponse<Item>> => {
     active: item.active,
     discountPer: item.discountPer,
     discountPrice: item.discountPrice,
+    category: {
+      id: categoryId,
+    },
   };
 
   try {

@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 
-import type { Bill } from "../types/bill";
+import type { Bill, BillRequest } from "../types/bill";
 import type { CustomResponse } from "../types/custom-response";
 import { generateError } from "../utils";
 import { axiosInstance } from "./axios-config";
@@ -67,10 +67,11 @@ export const getItemById = async (billId: number) => {
   }
 };
 
-export const addItem = async (bill: Bill) => {
+export const addItem = async (bill: BillRequest) => {
   try {
     const response: CustomResponse<Date> = await axiosInstance.post(
-      "/billing/addBill"
+      "/billing/addBill",
+      bill
     );
 
     return response;

@@ -1,58 +1,63 @@
 package com.marketplace.market.models;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class BillingTable {
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
+	@JsonIgnore
 	private int billId;
 
-	@Column(nullable = false, columnDefinition = "INT DEFAULT 9")
 	private int serviceTax;
 
-	@Column(nullable = false, columnDefinition = "INT DEFAULT 9")
 	private int cgst;
 
-	@Column(nullable = false, columnDefinition = "INT DEFAULT 9")
 	private int sgst;
 
-	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int discountPercentage;
 
-	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int discountAmount;
 
 	private int totalAmount;
 
-	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime timeStamp;
 
 	private int billerId;
 
-	@OneToMany(mappedBy = "billingTable", fetch = FetchType.EAGER)
-	private List<Item> items;
+	private int itemId;
 
-	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
-	private int item_id;
+	@ManyToMany(cascade = CascadeType.ALL)
+	private Set<Item> items;
 
 	public BillingTable() {
 		super();
-		this.serviceTax = 9;
-		this.cgst = 9;
-		this.sgst = 9;
-		this.discountPercentage = 0;
-		this.discountAmount = 0;
+	}
+
+	public BillingTable(int billId, int serviceTax, int cgst, int sgst, int discountPercentage, int discountAmount,
+			int totalAmount, LocalDateTime timeStamp, int billerId, int itemId, Set<Item> items) {
+		this.billId = billId;
+		this.serviceTax = serviceTax;
+		this.cgst = cgst;
+		this.sgst = sgst;
+		this.discountPercentage = discountPercentage;
+		this.discountAmount = discountAmount;
+		this.totalAmount = totalAmount;
+		this.timeStamp = timeStamp;
+		this.billerId = billerId;
+		this.itemId = itemId;
+		this.items = items;
 	}
 
 	public int getBillId() {
@@ -127,20 +132,28 @@ public class BillingTable {
 		this.billerId = billerId;
 	}
 
-	public List<Item> getItems() {
+	public int getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
+	}
+
+	public Set<Item> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(Set<Item> items) {
 		this.items = items;
 	}
 
-	public int getItem_id() {
-		return item_id;
-	}
-
-	public void setItem_id(int item_id) {
-		this.item_id = item_id;
+	@Override
+	public String toString() {
+		return "BillingTable [billId=" + billId + ", serviceTax=" + serviceTax + ", cgst=" + cgst + ", sgst=" + sgst
+				+ ", discountPercentage=" + discountPercentage + ", discountAmount=" + discountAmount + ", totalAmount="
+				+ totalAmount + ", timeStamp=" + timeStamp + ", billerId=" + billerId + ", itemId=" + itemId
+				+ ", items=" + items + "]";
 	}
 
 }

@@ -8,8 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Item {
@@ -29,60 +28,6 @@ public class Item {
 	private int discountPer;
 
 	private int discountPrice;
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "categoryId")
-	@JsonIgnore
-	private Category category;
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "billingTable_id")
-	private BillingTable billingTable;
-
-	@Transient
-	private int categoryId;
-	
-	@Transient
-	private int billingTable_id;
-
-
-	public Item(int itemId, String name, double price, int stock, boolean active, Category category, int categoryId) {
-		this.itemId = itemId;
-		this.name = name;
-		this.price = price;
-		this.stock = stock;
-		this.active = active;
-		this.category = category;
-		this.categoryId = categoryId;
-	}
-
-	public int getDiscountPer() {
-		return discountPer;
-	}
-
-	public void setDiscountPer(int discountPer) {
-		this.discountPer = discountPer;
-	}
-
-	public int getDiscountPrice() {
-		return discountPrice;
-	}
-
-	public void setDiscountPrice(int discountPrice) {
-		this.discountPrice = discountPrice;
-	}
-
-	public BillingTable getBillingTable() {
-		return billingTable;
-	}
-
-	public void setBillingTable(BillingTable billingTable) {
-		this.billingTable = billingTable;
-	}
-
-	public Item() {
-		super();
-	}
 
 	public int getItemId() {
 		return itemId;
@@ -116,22 +61,6 @@ public class Item {
 		this.stock = stock;
 	}
 
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	public int getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
-	}
-
 	public boolean isActive() {
 		return active;
 	}
@@ -139,5 +68,29 @@ public class Item {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+
+	public int getDiscountPer() {
+		return discountPer;
+	}
+
+	public void setDiscountPer(int discountPer) {
+		this.discountPer = discountPer;
+	}
+
+	public int getDiscountPrice() {
+		return discountPrice;
+	}
+
+	public void setDiscountPrice(int discountPrice) {
+		this.discountPrice = discountPrice;
+	}
+
+	@Override
+	public String toString() {
+		return "Item [itemId=" + itemId + ", name=" + name + ", price=" + price + ", stock=" + stock + ", active="
+				+ active + ", discountPer=" + discountPer + ", discountPrice=" + discountPrice + "]";
+	}
+
+	
 
 }

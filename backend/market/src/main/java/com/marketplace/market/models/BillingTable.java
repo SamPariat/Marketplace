@@ -40,9 +40,6 @@ public class BillingTable {
 
 	private int billerId;
 
-	@OneToMany(mappedBy = "billingTable", fetch = FetchType.EAGER)
-	private List<Item> items;
-
 	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
 	private int item_id;
 
@@ -125,14 +122,6 @@ public class BillingTable {
 
 	public void setBillerId(int billerId) {
 		this.billerId = billerId;
-	}
-
-	public List<Item> getItems() {
-		return items;
-	}
-
-	public void setItems(List<Item> items) {
-		this.items = items;
 	}
 
 	public int getItem_id() {

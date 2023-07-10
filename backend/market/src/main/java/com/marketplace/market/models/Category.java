@@ -8,50 +8,55 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 
-    private String name;
+	private String name;
 
-    private boolean isTaxApplicable;
+	private boolean isTaxApplicable;
 
-    public int getId() {
-        return id;
-    }
+	public void setTaxApplicable(boolean isTaxApplicable) {
+		this.isTaxApplicable = isTaxApplicable;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public boolean getIsTaxApplicable() {
-        return isTaxApplicable;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setIsTaxApplicable(boolean isTaxApplicable) {
-        this.isTaxApplicable = isTaxApplicable;
-    }
+	public boolean getIsTaxApplicable() {
+		return isTaxApplicable;
+	}
 
-    public Category() {
-    }
+	public void setIsTaxApplicable(boolean isTaxApplicable) {
+		this.isTaxApplicable = isTaxApplicable;
+	}
 
-    public Category(int id, String name, boolean isTaxApplicable) {
-        this.id = id;
-        this.name = name;
-        this.isTaxApplicable = isTaxApplicable;
-    }
+	public Category() {
+	}
 
-    @Override
-    public String toString() {
-        return "Category [id=" + id + ", name=" + name + ", isTaxApplicable=" + isTaxApplicable + "]";
-    }
+	public Category(int id, String name, boolean isTaxApplicable) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.isTaxApplicable = isTaxApplicable;
+	}
+
+	@Override
+	public String toString() {
+		return "Category [id=" + id + ", name=" + name + ", isTaxApplicable=" + isTaxApplicable + "]";
+	}
 
 }

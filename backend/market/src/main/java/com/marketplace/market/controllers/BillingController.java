@@ -18,6 +18,7 @@ import com.marketplace.market.models.BillingTable;
 import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.models.Item;
 import com.marketplace.market.services.BillingTableServices;
+import com.marketplace.market.services.CategoryServices;
 import com.marketplace.market.services.ItemServices;
 
 @RestController
@@ -28,6 +29,9 @@ public class BillingController {
 
 	@Autowired
 	private ItemServices itemServices;
+	
+	@Autowired
+	private CategoryServices categoryServices;
 
 	@GetMapping("/bill/{itemId}")
 	public String getBill(@PathVariable("itemId") int itemId) {

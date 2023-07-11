@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,17 +21,17 @@ public class BillingTable {
 	@JsonIgnore
 	private int billId;
 
-	private int serviceTax;
+	private double serviceTax;
 
-	private int cgst;
+	private double cgst;
 
-	private int sgst;
+	private double sgst;
 
-	private int discountPercentage;
+	private double discountPercentage;
 
-	private int discountAmount;
+	private double discountAmount;
 
-	private int totalAmount;
+	private double totalAmount;
 
 	private LocalDateTime timeStamp;
 
@@ -38,7 +39,7 @@ public class BillingTable {
 
 	private int itemId;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
 	private Set<Item> items;
 
 	public BillingTable() {
@@ -60,6 +61,7 @@ public class BillingTable {
 		this.items = items;
 	}
 
+	
 	public int getBillId() {
 		return billId;
 	}
@@ -68,51 +70,51 @@ public class BillingTable {
 		this.billId = billId;
 	}
 
-	public int getServiceTax() {
+	public double getServiceTax() {
 		return serviceTax;
 	}
 
-	public void setServiceTax(int serviceTax) {
+	public void setServiceTax(double serviceTax) {
 		this.serviceTax = serviceTax;
 	}
 
-	public int getCgst() {
+	public double getCgst() {
 		return cgst;
 	}
 
-	public void setCgst(int cgst) {
+	public void setCgst(double cgst) {
 		this.cgst = cgst;
 	}
 
-	public int getSgst() {
+	public double getSgst() {
 		return sgst;
 	}
 
-	public void setSgst(int sgst) {
+	public void setSgst(double sgst) {
 		this.sgst = sgst;
 	}
 
-	public int getDiscountPercentage() {
+	public double getDiscountPercentage() {
 		return discountPercentage;
 	}
 
-	public void setDiscountPercentage(int discountPercentage) {
+	public void setDiscountPercentage(double discountPercentage) {
 		this.discountPercentage = discountPercentage;
 	}
 
-	public int getDiscountAmount() {
+	public double getDiscountAmount() {
 		return discountAmount;
 	}
 
-	public void setDiscountAmount(int discountAmount) {
+	public void setDiscountAmount(double discountAmount) {
 		this.discountAmount = discountAmount;
 	}
 
-	public int getTotalAmount() {
+	public double getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(int totalAmount) {
+	public void setTotalAmount(double totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 

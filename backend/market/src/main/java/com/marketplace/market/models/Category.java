@@ -10,6 +10,10 @@ public class Category {
 
 	private String name;
 
+	private int tax;
+	
+	private int serviceTax;
+	
 	private boolean isTaxApplicable;
 
 	public void setTaxApplicable(boolean isTaxApplicable) {
@@ -43,16 +47,36 @@ public class Category {
 	public Category() {
 	}
 
-	public Category(int id, String name, boolean isTaxApplicable) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.isTaxApplicable = isTaxApplicable;
+	public int getTax() {
+		return tax;
+	}
+
+	public void setTax(int tax) {
+		this.tax = tax;
+	}
+
+	public int getServiceTax() {
+		return serviceTax;
+	}
+
+	public void setServiceTax(int serviceTax) {
+		this.serviceTax = serviceTax;
 	}
 
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", isTaxApplicable=" + isTaxApplicable + "]";
+		return "Category [id=" + id + ", name=" + name + ", tax=" + tax + ", serviceTax=" + serviceTax
+				+ ", isTaxApplicable=" + isTaxApplicable + "]";
 	}
 
+	public Category(int id, String name, int tax, int serviceTax, boolean isTaxApplicable) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.tax = tax;
+		this.serviceTax = serviceTax;
+		this.isTaxApplicable = isTaxApplicable;
+	}
+
+	
 }

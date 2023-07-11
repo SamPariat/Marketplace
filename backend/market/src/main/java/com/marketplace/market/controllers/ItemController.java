@@ -112,8 +112,6 @@ public class ItemController {
 			Item newItem = new Item(item.getItemId(), item.getName(), item.getPrice(), item.getStock(),
 					item.isActive(), item.getDiscountPer(), item.getDiscountPrice(), category.get());
 
-			System.out.println(newItem);
-
 			itemServices.save(newItem);
 
 			return ResponseEntity.status(HttpStatus.CREATED)

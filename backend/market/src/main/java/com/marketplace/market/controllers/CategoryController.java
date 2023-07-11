@@ -110,11 +110,13 @@ public class CategoryController {
                         .body(new CustomResponse<Category>(null, null, "Requested category does not exist."));
             }
 
-            categoryServices.updateCategoryById(categoryId, category.getName(), category.getIsTaxApplicable());
+            categoryServices.updateCategoryById(categoryId, category.getName(), category.getIsTaxApplicable(),category.getTax(),category.getServiceTax());
 
             Category updatedCategory = new Category(
                     categoryId,
                     category.getName(),
+                    category.getServiceTax(),
+                    category.getTax(),
                     category.getIsTaxApplicable());
 
             return ResponseEntity.status(HttpStatus.OK)

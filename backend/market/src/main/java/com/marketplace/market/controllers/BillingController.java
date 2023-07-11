@@ -19,60 +19,93 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marketplace.market.models.BillingTable;
+import com.marketplace.market.models.Category;
 import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.models.Item;
 import com.marketplace.market.services.BillingTableServices;
+import com.marketplace.market.services.CategoryServices;
 import com.marketplace.market.services.ItemServices;
 
 @RestController
 @RequestMapping(value = "/billing")
 public class BillingController {
-    @Autowired
-    private BillingTableServices billingService;
+	@Autowired
+	private BillingTableServices billingService;
 
-    @Autowired
-    private ItemServices itemServices;
+	@Autowired
+	private ItemServices itemServices;
 
-    @GetMapping("/time")
-    public LocalDateTime time() {
-        LocalDateTime time = LocalDateTime.now();
-        return time;
-    }
+	@Autowired
+	private CategoryServices categoryServices;
 
-    @GetMapping("/bill/{itemId}")
-    public String getBill(@PathVariable("itemId") int itemId) {
-        Item bill = itemServices.findById(itemId).orElse(null);
-        BillingTable values = billingService.findById(itemId).orElse(null);
-        double per = (values.getCgst() + values.getSgst() - bill.getDiscountPer()) * bill.getPrice() * 0.01;
-        double finalAmount = bill.getPrice() + per - values.getDiscountAmount();
-        int remainingStock = bill.getStock();
-        bill.setStock(remainingStock - 1);
-        itemServices.save(bill);
-        return "Sgst:" + values.getSgst() * bill.getPrice() + "\ncgst:" + values.getCgst() * bill.getPrice()
-                + "\nfinalAmount:" + finalAmount;
+	@GetMapping("/time")
+	public LocalDateTime time() {
+		LocalDateTime time = LocalDateTime.now();
+		return time;
+	}
 
-    }
+	@GetMapping("/bill/{itemId}")
+	public ResponseEntity<CustomResponse<BillingTable>> getBill(@PathVariable("itemId") int itemId) {
+		try {
+			Item bill = itemServices.findById(itemId).orElse(null);
 
-    @GetMapping("/bills")
-    public ResponseEntity<CustomResponse<List<BillingTable>>> getItems() {
-        try {
-            List<BillingTable> bills = billingService.findAll();
+			Category checkTax = categoryServices.findById(itemId).orElse(null);
 
-            if (bills.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new CustomResponse<List<BillingTable>>(Collections.emptyList(), "No bills are present.", null));
-            }
+			if (bill == null) {
+				return ResponseEntity.status(HttpStatus.OK).body(new CustomResponse<BillingTable>(
+						null, "No item with such itemId is present", null));
+			}
+			double priceAfterTax;
+			if (checkTax.getIsTaxApplicable()) {
+				priceAfterTax = (checkTax.getTax() +checkTax.getServiceTax()) * bill.getPrice() * 0.01+(- bill.getDiscountPer())* bill.getPrice() * 0.01;
+			} else {
+				priceAfterTax = (-bill.getDiscountPer()) * bill.getPrice() * 0.01;
+			}
+			double finalAmount = bill.getPrice() + priceAfterTax - bill.getDiscountPrice();
+			int remainingStock = bill.getStock();
+			bill.setStock(remainingStock - 1);
+			
+			BillingTable newBill=new BillingTable();
+			newBill.setServiceTax(checkTax.getServiceTax());
+			newBill.setCgst((checkTax.getTax())/2);
+			newBill.setSgst((checkTax.getTax())/2);
+			newBill.setDiscountPercentage(bill.getDiscountPer());
+			newBill.setDiscountAmount(bill.getDiscountPrice());
+			newBill.setTotalAmount(finalAmount);
+			newBill.setTimeStamp(LocalDateTime.now());
+			newBill.setBillerId(1);
+			newBill.setItemId(itemId);
+			billingService.save(newBill);
+			return ResponseEntity.status(HttpStatus.OK).body(new CustomResponse<BillingTable>(
+					newBill, "Items billed successfully", null));
+		}catch(Exception e){
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<BillingTable>(null,
+				"Some error occurred while trying to save the bill.", e.getMessage()));
+	}
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new CustomResponse<List<BillingTable>>(bills, "All bills found successfully.", null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new CustomResponse<List<BillingTable>>(null,
-                            "Some error occurred while fetching the bills.", e.getMessage()));
-        }
-    }
+	}
 
-    @PostMapping("/addBill")
+	@GetMapping("/bills")
+	public ResponseEntity<CustomResponse<List<BillingTable>>> getItems() {
+		try {
+
+			List<BillingTable> bills = billingService.findAll();
+
+			if (bills.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK).body(
+						new CustomResponse<List<BillingTable>>(Collections.emptyList(), "No bills are present.", null));
+
+			}
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new CustomResponse<List<BillingTable>>(bills, "All bills found successfully.", null));
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<List<BillingTable>>(
+					null, "Some error occurred while fetching the bills.", e.getMessage()));
+		}
+	}
+
+	@PostMapping("/addBill")
     public ResponseEntity<CustomResponse<BillingTable>> addItem(@RequestBody BillingTable bill) {
         try {
             Set<Integer> idsOfItems = new HashSet<>();
@@ -99,12 +132,9 @@ public class BillingController {
                                 "Cannot find the following items: " + notFoundIds));
             }
 
-            BillingTable newBill = new BillingTable(bill.getBillId(), bill.getServiceTax(), bill.getCgst(),
-                    bill.getSgst(),
-                    bill.getDiscountPercentage(), bill.getDiscountAmount(), bill.getTotalAmount(), bill.getTimeStamp(),
-                    bill.getBillerId(), bill.getItemId(), items);
-
-            billingService.save(newBill);
+            bill.setTimeStamp(LocalDateTime.now());
+            bill.setItems(items);
+            billingService.save(bill);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CustomResponse<BillingTable>(bill, "Successfully added the bill.", null));
@@ -115,20 +145,20 @@ public class BillingController {
         }
     }
 
-    @GetMapping("/billId/{billId}")
-    public ResponseEntity<CustomResponse<BillingTable>> getItemById(@PathVariable Integer billId) {
-        try {
-            Optional<BillingTable> bill = billingService.findById(billId);
-            if (!bill.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new CustomResponse<BillingTable>(null, null, "Requested bill does not exist."));
-            }
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new CustomResponse<BillingTable>(bill.get(), "Bill found successfully.", null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<BillingTable>(null,
-                    "Some error occurred while getting the bill.", e.getMessage()));
-        }
-    }
+	@GetMapping("/billId/{billId}")
+	public ResponseEntity<CustomResponse<BillingTable>> getItemById(@PathVariable Integer billId) {
+		try {
+			Optional<BillingTable> bill = billingService.findById(billId);
+			if (!bill.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new CustomResponse<BillingTable>(null, null, "Requested bill does not exist."));
+			}
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new CustomResponse<BillingTable>(bill.get(), "Bill found successfully.", null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<BillingTable>(null,
+					"Some error occurred while getting the bill.", e.getMessage()));
+		}
+	}
 
 }

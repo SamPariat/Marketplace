@@ -25,6 +25,21 @@ export const time = async (): Promise<CustomResponse<Date>> => {
 export const getBill = async (itemId: number) => {
   try {
     const response: CustomResponse<Date> = await axiosInstance.get(
+      `/billing/${itemId}`
+    );
+
+    return response;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};
+
+export const getAllBills = async (): Promise<CustomResponse<Array<Bill>>> => {
+  try {
+    const response: CustomResponse<Array<Bill>> = await axiosInstance.get(
       "/billing/bills"
     );
 
@@ -37,10 +52,10 @@ export const getBill = async (itemId: number) => {
   }
 };
 
-export const getItems = async () => {
+export const getBillById = async (billId: number) => {
   try {
     const response: CustomResponse<Date> = await axiosInstance.get(
-      "/billing/time"
+      `/billing?id=${billId}`
     );
 
     return response;
@@ -52,22 +67,7 @@ export const getItems = async () => {
   }
 };
 
-export const getItemById = async (billId: number) => {
-  try {
-    const response: CustomResponse<Date> = await axiosInstance.get(
-      `/billing/billId/${billId}`
-    );
-
-    return response;
-  } catch (e) {
-    if (e instanceof AxiosError) {
-      throw new Error(generateError(e.response!));
-    }
-    throw new Error("Some error occurred.");
-  }
-};
-
-export const addItem = async (bill: BillRequest) => {
+export const addBill = async (bill: BillRequest) => {
   try {
     const response: CustomResponse<Date> = await axiosInstance.post(
       "/billing/addBill",

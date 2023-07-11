@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marketplace.market.models.BillingTable;
@@ -54,7 +55,7 @@ public class BillingController {
     }
 
     @GetMapping("/bills")
-    public ResponseEntity<CustomResponse<List<BillingTable>>> getItems() {
+    public ResponseEntity<CustomResponse<List<BillingTable>>> getAllBills() {
         try {
             List<BillingTable> bills = billingService.findAll();
 
@@ -72,8 +73,24 @@ public class BillingController {
         }
     }
 
+    @GetMapping("")
+    public ResponseEntity<CustomResponse<BillingTable>> getBillById(@RequestParam("id") int billId) {
+        try {
+            Optional<BillingTable> bill = billingService.findById(billId);
+            if (!bill.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new CustomResponse<BillingTable>(null, null, "Requested bill does not exist."));
+            }
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new CustomResponse<BillingTable>(bill.get(), "Bill found successfully.", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<BillingTable>(null,
+                    "Some error occurred while getting the bill.", e.getMessage()));
+        }
+    }
+
     @PostMapping("/addBill")
-    public ResponseEntity<CustomResponse<BillingTable>> addItem(@RequestBody BillingTable bill) {
+    public ResponseEntity<CustomResponse<BillingTable>> addBill(@RequestBody BillingTable bill) {
         try {
             Set<Integer> idsOfItems = new HashSet<>();
 
@@ -99,12 +116,9 @@ public class BillingController {
                                 "Cannot find the following items: " + notFoundIds));
             }
 
-            BillingTable newBill = new BillingTable(bill.getBillId(), bill.getServiceTax(), bill.getCgst(),
-                    bill.getSgst(),
-                    bill.getDiscountPercentage(), bill.getDiscountAmount(), bill.getTotalAmount(), bill.getTimeStamp(),
-                    bill.getBillerId(), bill.getItemId(), items);
-
-            billingService.save(newBill);
+            bill.setTimeStamp(LocalDateTime.now());
+            bill.setItems(items);
+            billingService.save(bill);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CustomResponse<BillingTable>(bill, "Successfully added the bill.", null));
@@ -112,22 +126,6 @@ public class BillingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new CustomResponse<BillingTable>(null, "Some error occurred while trying to save the bill.",
                             e.getMessage()));
-        }
-    }
-
-    @GetMapping("/billId/{billId}")
-    public ResponseEntity<CustomResponse<BillingTable>> getItemById(@PathVariable Integer billId) {
-        try {
-            Optional<BillingTable> bill = billingService.findById(billId);
-            if (!bill.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new CustomResponse<BillingTable>(null, null, "Requested bill does not exist."));
-            }
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new CustomResponse<BillingTable>(bill.get(), "Bill found successfully.", null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<BillingTable>(null,
-                    "Some error occurred while getting the bill.", e.getMessage()));
         }
     }
 

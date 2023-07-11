@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ import com.marketplace.market.services.UserServices;
 public class UserController {
     @Autowired
     private UserServices userServices;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -72,12 +73,20 @@ public class UserController {
     @PostMapping(path = "/signup")
     public ResponseEntity<CustomResponse<User>> signup(@RequestBody User user) {
         try {
-        	String encodedPassword = passwordEncoder.encode(user.getPassword());
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encodedPassword);
+
             userServices.save(user);
+
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new CustomResponse<User>(user, "Successfully signed up the user.", null));
+        } catch (JpaSystemException jes) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new CustomResponse<User>(null,
+                            "Enter the correct role (either ADMIN, BILLER or INVENTORY_MANAGER).",
+                            jes.getMessage()));
         } catch (Exception e) {
+            System.out.println(e.getClass());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new CustomResponse<User>(null, "Some error occurred while signing up the user.",
                             e.getMessage()));
@@ -113,6 +122,8 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new CustomResponse<User>(null, null, "Requested user does not exist."));
             }
+
+            System.out.println(user.getRole());
 
             userServices.updateUserById(userId, user.getEmail(), user.getPassword(), user.getName(), user.getRole());
 

@@ -14,7 +14,7 @@ const InputWithLabel = ({
   text,
 }: InputWithLabelProps) => {
   return (
-    <div className="flex flex-col my-2">
+    <div className="flex flex-col my-2 w-1/3 text-slate-900 dark:text-slate-200">
       <label htmlFor={name} className="font-semibold">
         {text}
       </label>

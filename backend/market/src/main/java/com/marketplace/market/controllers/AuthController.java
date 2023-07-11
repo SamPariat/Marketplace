@@ -1,6 +1,4 @@
 package com.marketplace.market.controllers;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,18 +28,13 @@ public class AuthController {
     @Autowired
     private AuthenticationManager manager;
 
-
     @Autowired
     private JwtHelper helper;
-
-    private Logger logger =  LoggerFactory.getLogger(AuthController.class);
-
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
 
         this.doAuthenticate(request.getEmail(), request.getPassword());
-
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String token = this.helper.generateToken(userDetails);
@@ -58,7 +51,6 @@ public class AuthController {
         try {
             manager.authenticate(authentication);
 
-
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException(" Invalid Username or Password  !!");
         }
@@ -71,4 +63,3 @@ public class AuthController {
     }
 
 }
-

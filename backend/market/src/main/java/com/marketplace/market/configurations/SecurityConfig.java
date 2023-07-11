@@ -18,20 +18,22 @@ import com.marketplace.market.exceptions.JwtAuthenticationEntryPoint;
 public class SecurityConfig {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
 	@Autowired
 	private UserDetailsService userDetailsService;
 
 	@Autowired
 	private JwtAuthenticationEntryPoint point;
+	
 	@Autowired
 	private JwtAuthenticationFilter filter;
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
 				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/test").authenticated().requestMatchers("/auth/login").permitAll()
+						auth -> auth.requestMatchers("/auth/login", "/**").permitAll()
 								.requestMatchers("/user/signup").permitAll().anyRequest().authenticated())
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

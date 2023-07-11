@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.marketplace.market.models.User;
 import com.marketplace.market.models.CustomResponse;
+import com.marketplace.market.models.User;
 import com.marketplace.market.services.UserServices;
 
 @RestController
@@ -26,6 +27,9 @@ import com.marketplace.market.services.UserServices;
 public class UserController {
     @Autowired
     private UserServices userServices;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping(path = "")
     public ResponseEntity<CustomResponse<List<User>>> getAllUsers() {
@@ -68,6 +72,8 @@ public class UserController {
     @PostMapping(path = "/signup")
     public ResponseEntity<CustomResponse<User>> signup(@RequestBody User user) {
         try {
+        	String encodedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
             userServices.save(user);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new CustomResponse<User>(user, "Successfully signed up the user.", null));

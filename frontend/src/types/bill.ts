@@ -11,7 +11,7 @@ export type Bill = {
   timeStamp: Date;
   billerId: number;
   items: Array<Item>;
-  item_id: number;
+  itemId: number;
 };
 
 export type BillRequest = {

@@ -1,4 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 
 const App = () => {
@@ -6,6 +7,7 @@ const App = () => {
     {
       path: "/",
       element: <MainPage />,
+      children: [{ path: "login", element: <LoginPage /> }],
     },
   ]);
 

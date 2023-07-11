@@ -1,6 +1,7 @@
 package com.marketplace.market.controllers;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -53,17 +54,23 @@ public class BillingController {
     }
 
     @GetMapping("/bills")
-    public List<BillingTable> getItems() {
+    public ResponseEntity<CustomResponse<List<BillingTable>>> getItems() {
+        try {
+            List<BillingTable> bills = billingService.findAll();
 
-        return billingService.findAll();
+            if (bills.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new CustomResponse<List<BillingTable>>(Collections.emptyList(), "No bills are present.", null));
+            }
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new CustomResponse<List<BillingTable>>(bills, "All bills found successfully.", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new CustomResponse<List<BillingTable>>(null,
+                            "Some error occurred while fetching the bills.", e.getMessage()));
+        }
     }
-
-    // @PostMapping("/addBill")
-    // public BillingTable addItem(@RequestBody BillingTable bill) {
-    // System.out.println(bill);
-    // billingService.save(bill);
-    // return bill;
-    // }
 
     @PostMapping("/addBill")
     public ResponseEntity<CustomResponse<BillingTable>> addItem(@RequestBody BillingTable bill) {
@@ -109,10 +116,19 @@ public class BillingController {
     }
 
     @GetMapping("/billId/{billId}")
-    public Item getItemById(@PathVariable Integer itemId) {
-
-        Item item = itemServices.findById(itemId).orElse(null);
-        return item;
+    public ResponseEntity<CustomResponse<BillingTable>> getItemById(@PathVariable Integer billId) {
+        try {
+            Optional<BillingTable> bill = billingService.findById(billId);
+            if (!bill.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new CustomResponse<BillingTable>(null, null, "Requested bill does not exist."));
+            }
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new CustomResponse<BillingTable>(bill.get(), "Bill found successfully.", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<BillingTable>(null,
+                    "Some error occurred while getting the bill.", e.getMessage()));
+        }
     }
 
 }

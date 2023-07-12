@@ -21,14 +21,14 @@ const SideBar = () => {
         <SideBarLinks
           icon={BiCategory}
           text="Categories"
-          linkTo="/categories"
+          linkTo="categories"
         />
         <SideBarLinks
           icon={FaIndianRupeeSign}
           text="Billing"
-          linkTo="/billing"
+          linkTo="billing"
         />
-        <SideBarLinks icon={FiShoppingCart} text="Items" linkTo="/items" />
+        <SideBarLinks icon={FiShoppingCart} text="Items" linkTo="items" />
       </div>
       <div className="absolute bottom-0">
         <SideBarLinks icon={TbLogin} text="Login" linkTo="/login" />

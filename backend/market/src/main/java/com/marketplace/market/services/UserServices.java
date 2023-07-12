@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.marketplace.market.models.Role;
 import com.marketplace.market.models.User;
 
 import jakarta.transaction.Transactional;

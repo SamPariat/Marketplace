@@ -8,15 +8,16 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marketplace.market.authentication.JwtHelper;
-import com.marketplace.market.models.JwtRequest;
-import com.marketplace.market.models.JwtResponse;
+import com.marketplace.market.models.CustomResponse;
+import com.marketplace.market.models.LoginRequest;
+import com.marketplace.market.models.LoginResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,40 +27,50 @@ public class AuthController {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private AuthenticationManager manager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtHelper helper;
+    private JwtHelper jwtHelper;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
+    public ResponseEntity<CustomResponse<LoginResponse>> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            doAuthenticate(loginRequest.getEmail(), loginRequest.getPassword());
 
-        this.doAuthenticate(request.getEmail(), request.getPassword());
+            // If user doesn't exist, the loadUserByUsername method throws a
+            // UsernameNotFoundException
+            UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        String token = this.helper.generateToken(userDetails);
+            // Generate the token if the user exists
+            String token = jwtHelper.generateToken(userDetails);
 
-        JwtResponse response = JwtResponse.builder()
-                .jwtToken(token)
-                .username(userDetails.getUsername()).build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+            LoginResponse response = LoginResponse.builder()
+                    .jwtToken(token)
+                    .email(userDetails.getUsername()).build();
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new CustomResponse<LoginResponse>(response, "User logged in successfully.", null));
+        } catch (UsernameNotFoundException unfe) {
+            return null;
+        } catch (BadCredentialsException bce) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CustomResponse<LoginResponse>(null,
+                    "Entered credentials are invalid. Either email or password entered is wrong.", bce.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<LoginResponse>(null,
+                    "Something went wrong while logging in the user.", e.getMessage()));
+        }
     }
 
     private void doAuthenticate(String email, String password) {
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
         try {
-            manager.authenticate(authentication);
+            authenticationManager.authenticate(authentication);
 
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException(" Invalid Username or Password  !!");
+            throw new BadCredentialsException("Invalid email or password.");
         }
 
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public String exceptionHandler() {
-        return "Credentials Invalid !!";
     }
 
 }

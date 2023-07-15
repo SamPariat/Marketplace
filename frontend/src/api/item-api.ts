@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 import { axiosInstance } from "./axios-config";
 
@@ -10,11 +10,9 @@ import { generateError } from "../utils";
 
 export const getItems = async (): Promise<CustomResponse<Array<Item>>> => {
   try {
-    const response: CustomResponse<Array<Item>> = await axiosInstance.get(
-      "/item/all"
-    );
+    const response: AxiosResponse = await axiosInstance.get("/item/all");
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -27,11 +25,9 @@ export const getItemById = async (
   itemId: number
 ): Promise<CustomResponse<Item>> => {
   try {
-    const response: CustomResponse<Item> = await axiosInstance.get(
-      `/item/${itemId}`
-    );
+    const response: AxiosResponse = await axiosInstance.get(`/item/${itemId}`);
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -44,11 +40,11 @@ export const getItemsByName = async (
   name: string
 ): Promise<CustomResponse<Array<Item>>> => {
   try {
-    const response: CustomResponse<Array<Item>> = await axiosInstance.get(
+    const response: AxiosResponse = await axiosInstance.get(
       `/item?name=${name}`
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -75,12 +71,12 @@ export const addItem = async (
   };
 
   try {
-    const response: CustomResponse<Item> = await axiosInstance.post(
+    const response: AxiosResponse = await axiosInstance.post(
       "/item/add-item",
       body
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -93,11 +89,11 @@ export const deleteItem = async (
   itemId: number
 ): Promise<CustomResponse<Item>> => {
   try {
-    const response: CustomResponse<Item> = await axiosInstance.delete(
+    const response: AxiosResponse = await axiosInstance.delete(
       `/item/delete-item?id=${itemId}`
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -110,11 +106,11 @@ export const updateItem = async (
   itemId: number
 ): Promise<CustomResponse<Item>> => {
   try {
-    const response: CustomResponse<Item> = await axiosInstance.patch(
+    const response: AxiosResponse = await axiosInstance.patch(
       `/item/update?id=${itemId}`
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));

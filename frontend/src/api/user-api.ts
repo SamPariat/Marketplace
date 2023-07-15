@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 import { axiosInstance } from "./axios-config";
 
@@ -8,11 +8,9 @@ import { generateError } from "../utils";
 
 export const getAllUsers = async (): Promise<CustomResponse<Array<User>>> => {
   try {
-    const response: CustomResponse<Array<User>> = await axiosInstance.get(
-      "/user"
-    );
+    const response: AxiosResponse = await axiosInstance.get("/user");
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -25,11 +23,9 @@ export const getUser = async (
   userId: number
 ): Promise<CustomResponse<User>> => {
   try {
-    const response: CustomResponse<User> = await axiosInstance.get(
-      `/user/${userId}`
-    );
+    const response: AxiosResponse = await axiosInstance.get(`/user/${userId}`);
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -47,12 +43,12 @@ export const signup = async (user: User): Promise<CustomResponse<User>> => {
   };
 
   try {
-    const response: CustomResponse<User> = await axiosInstance.post(
+    const response: AxiosResponse = await axiosInstance.post(
       "/user/signup",
       body
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -65,11 +61,11 @@ export const deleteByUserId = async (
   userId: number
 ): Promise<CustomResponse<User>> => {
   try {
-    const response: CustomResponse<User> = await axiosInstance.delete(
+    const response: AxiosResponse = await axiosInstance.delete(
       `/user/delete?id=${userId}`
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -91,12 +87,12 @@ export const updateUser = async (
   };
 
   try {
-    const response: CustomResponse<User> = await axiosInstance.patch(
+    const response: AxiosResponse = await axiosInstance.patch(
       `/user/update?id=${userId}`,
       body
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));

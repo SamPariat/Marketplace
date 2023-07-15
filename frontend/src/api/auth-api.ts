@@ -14,7 +14,6 @@ export const login = async (
       loginRequest
     );
 
-    console.log(response.data);
     const { email, jwtToken: token } = response.data.data;
 
     localStorage.setItem(

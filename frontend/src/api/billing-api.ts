@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 import type { Bill, BillRequest } from "../types/bill";
 import type { CustomResponse } from "../types/custom-response";
@@ -9,11 +9,9 @@ import { axiosInstance } from "./axios-config";
 
 export const time = async (): Promise<CustomResponse<Date>> => {
   try {
-    const response: CustomResponse<Date> = await axiosInstance.get(
-      "/billing/time"
-    );
+    const response: AxiosResponse = await axiosInstance.get("/billing/time");
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -24,11 +22,11 @@ export const time = async (): Promise<CustomResponse<Date>> => {
 
 export const getBill = async (itemId: number) => {
   try {
-    const response: CustomResponse<Date> = await axiosInstance.get(
+    const response: AxiosResponse = await axiosInstance.get(
       `/billing/${itemId}`
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -39,11 +37,9 @@ export const getBill = async (itemId: number) => {
 
 export const getAllBills = async (): Promise<CustomResponse<Array<Bill>>> => {
   try {
-    const response: CustomResponse<Array<Bill>> = await axiosInstance.get(
-      "/billing/bills"
-    );
+    const response: AxiosResponse = await axiosInstance.get("/billing/bills");
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -54,11 +50,11 @@ export const getAllBills = async (): Promise<CustomResponse<Array<Bill>>> => {
 
 export const getBillById = async (billId: number) => {
   try {
-    const response: CustomResponse<Date> = await axiosInstance.get(
+    const response: AxiosResponse = await axiosInstance.get(
       `/billing?id=${billId}`
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -69,12 +65,12 @@ export const getBillById = async (billId: number) => {
 
 export const addBill = async (bill: BillRequest) => {
   try {
-    const response: CustomResponse<Date> = await axiosInstance.post(
+    const response: AxiosResponse = await axiosInstance.post(
       "/billing/addBill",
       bill
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));

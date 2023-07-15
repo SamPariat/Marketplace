@@ -28,7 +28,16 @@ const App = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer
+        autoClose={5000}
+        theme="dark"
+        draggable
+        pauseOnHover={false}
+        bodyStyle={{
+          fontFamily: "Exo",
+        }}
+        limit={3}
+      />
       <RouterProvider router={router} />;
     </>
   );

@@ -1,7 +1,5 @@
-import { Item } from "./item";
-
 export type Bill = {
-  billing: number;
+  billId: number;
   serviceTax: number;
   cgst: number;
   sgst: number;
@@ -10,18 +8,8 @@ export type Bill = {
   totalAmount: number;
   timeStamp: Date;
   billerId: number;
-  items: Array<Item>;
-  itemId: number;
 };
 
 export type BillRequest = {
-  serviceTax: number;
-  cgst: number;
-  sgst: number;
-  discountPercentage: number;
-  discountAmount: number;
-  totalAmount: number;
-  timeStamp: Date;
-  billerId: number;
-  items: Set<{ itemId: number }>;
-};
+  items: Array<{ itemId: number }>;
+} & Omit<Bill, "billId">;

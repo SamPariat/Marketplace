@@ -11,6 +11,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
 @Entity
@@ -18,7 +20,6 @@ public class BillingTable {
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
-	@JsonIgnore
 	private int billId;
 
 	private double serviceTax;
@@ -33,13 +34,15 @@ public class BillingTable {
 
 	private double totalAmount;
 
+	@JsonIgnore
 	private LocalDateTime timeStamp;
 
 	private int billerId;
 
-	private int itemId;
-
-	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinTable(name = "billing_table_items", joinColumns = {
+			@JoinColumn(name = "billing_table_id") }, inverseJoinColumns = {
+					@JoinColumn(name = "item_id") })
 	private Set<Item> items;
 
 	public BillingTable() {
@@ -47,7 +50,7 @@ public class BillingTable {
 	}
 
 	public BillingTable(int billId, int serviceTax, int cgst, int sgst, int discountPercentage, int discountAmount,
-			int totalAmount, LocalDateTime timeStamp, int billerId, int itemId, Set<Item> items) {
+			int totalAmount, LocalDateTime timeStamp, int billerId, Set<Item> items) {
 		this.billId = billId;
 		this.serviceTax = serviceTax;
 		this.cgst = cgst;
@@ -57,7 +60,6 @@ public class BillingTable {
 		this.totalAmount = totalAmount;
 		this.timeStamp = timeStamp;
 		this.billerId = billerId;
-		this.itemId = itemId;
 		this.items = items;
 	}
 
@@ -134,14 +136,6 @@ public class BillingTable {
 		this.billerId = billerId;
 	}
 
-	public int getItemId() {
-		return itemId;
-	}
-
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
-	}
-
 	public Set<Item> getItems() {
 		return items;
 	}
@@ -154,8 +148,7 @@ public class BillingTable {
 	public String toString() {
 		return "BillingTable [billId=" + billId + ", serviceTax=" + serviceTax + ", cgst=" + cgst + ", sgst=" + sgst
 				+ ", discountPercentage=" + discountPercentage + ", discountAmount=" + discountAmount + ", totalAmount="
-				+ totalAmount + ", timeStamp=" + timeStamp + ", billerId=" + billerId + ", itemId=" + itemId
-				+ ", items=" + items + "]";
+				+ totalAmount + ", timeStamp=" + timeStamp + ", billerId=" + billerId + ", items=" + items + "]";
 	}
 
 }

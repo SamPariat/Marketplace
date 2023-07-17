@@ -1,5 +1,4 @@
-import React from "react";
-import userImg from "../components/images/user.avif";
+import userImg from "../../public/images/user.avif";
 
 const Profile = () => {
   return (
@@ -10,11 +9,11 @@ const Profile = () => {
         </div>
         <div className="col-span-2 pt-10 pl-5">
           <div className="grid grid-cols-2 pb-10">
-            <h1 className="text-4xl font-Raleway text-slate-900">
+            <h1 className="text-4xl font-Raleway text-slate-900 dark:text-slate-200">
               Profile Page
             </h1>
             <div className="grid grid-cols-3">
-              <button className="bg-transparent hover:bg-slate-700 text-slate-900 font-semibold hover:text-white py-2 px-4 border border-slate-500 hover:border-transparent rounded col-span-1 ">
+              <button className="bg-transparent dark:bg-slate-500 hover:bg-slate-700 dark:hover:bg-slate-600 text-slate-900 dark:text-slate-200 font-semibold hover:text-white py-2 px-4 border border-slate-500 hover:border-transparent rounded col-span-1 ">
                 Edit Profile
               </button>
             </div>
@@ -23,13 +22,13 @@ const Profile = () => {
             <form action="">
               <div className="mb-4">
                 <label
-                  className="block text-gray-700 text-xl font-bold mb-2"
+                  className="block text-gray-700 dark:text-gray-200 text-xl font-bold mb-2"
                   htmlFor="username"
                 >
                   Username
                 </label>
                 <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline"
                   id="username"
                   type="text"
                   placeholder="Username"
@@ -37,7 +36,7 @@ const Profile = () => {
               </div>
               <div className="mb-4">
                 <label
-                  className="block text-gray-700 text-xl font-bold mb-2"
+                  className="block text-gray-700 dark:text-gray-200 text-xl font-bold mb-2"
                   htmlFor="username"
                 >
                   Biller Id
@@ -51,7 +50,7 @@ const Profile = () => {
               </div>
               <div className="mb-6">
                 <label
-                  className="block text-gray-700 text-xl font-bold mb-2"
+                  className="block text-gray-700 dark:text-gray-200 text-xl font-bold mb-2"
                   htmlFor="password"
                 >
                   Password
@@ -63,7 +62,7 @@ const Profile = () => {
                   placeholder="****************"
                 />
               </div>
-              <button className="bg-slate-700 hover:bg-slate-900 text-white font-bold py-2 px-7 border border-slate-500 rounded ">
+              <button className="bg-slate-700 dark:bg-slate-500 hover:bg-slate-900 dark:hover:bg-slate-700 text-white font-bold py-2 px-7 border border-slate-500 rounded ">
                 Save
               </button>
             </form>

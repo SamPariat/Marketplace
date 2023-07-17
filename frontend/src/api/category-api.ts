@@ -1,19 +1,17 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
-import { axiosInstance } from "./axios-config";
-import { generateError } from "../utils";
-import { CustomResponse } from "../types/custom-response";
 import { Category } from "../types/category";
+import { CustomResponse } from "../types/custom-response";
+import { generateError } from "../utils";
+import { axiosInstance } from "./axios-config";
 
 export const getAllCategories = async (): Promise<
   CustomResponse<Array<Category>>
 > => {
   try {
-    const response: CustomResponse<Array<Category>> = await axiosInstance.get(
-      "/category/all"
-    );
+    const response: AxiosResponse = await axiosInstance.get("/category/all");
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -22,15 +20,13 @@ export const getAllCategories = async (): Promise<
   }
 };
 
-export const getCategory = async (
-  categoryId: number
-): Promise<CustomResponse<Category>> => {
+export const getCategory = async (categoryId: number) => {
   try {
-    const response: CustomResponse<Category> = await axiosInstance.get(
+    const response: AxiosResponse = await axiosInstance.get(
       `/category/${categoryId}`
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -49,12 +45,12 @@ export const addCategory = async (
   };
 
   try {
-    const response: CustomResponse<Category> = await axiosInstance.post(
+    const response: AxiosResponse = await axiosInstance.post(
       "/category/add-category",
       body
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -67,11 +63,11 @@ export const deleteCategory = async (
   categoryId: number
 ): Promise<CustomResponse<Category>> => {
   try {
-    const response: CustomResponse<Category> = await axiosInstance.delete(
+    const response: AxiosResponse = await axiosInstance.delete(
       `/category/delete?id=${categoryId}`
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));
@@ -91,12 +87,12 @@ export const updateCategory = async (
   };
 
   try {
-    const response: CustomResponse<Category> = await axiosInstance.patch(
+    const response: AxiosResponse = await axiosInstance.patch(
       `/category/update?id=${categoryId}`,
       body
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));

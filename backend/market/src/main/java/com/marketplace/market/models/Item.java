@@ -1,10 +1,13 @@
 package com.marketplace.market.models;
 
+import java.util.Set;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -28,6 +31,9 @@ public class Item {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Category category;
+
+	@ManyToMany(mappedBy = "items")
+	private Set<BillingTable> bills;
 
 	public Item() {
 	}
@@ -114,9 +120,5 @@ public class Item {
 				+ active + ", discountPer=" + discountPer + ", discountPrice=" + discountPrice + ", category="
 				+ category + "]";
 	}
-
-
-
-	
 
 }

@@ -1,7 +1,7 @@
 export type User = {
-  id: number;
+  id?: number;
   email: string;
   password: string;
   name: string;
-  role: number;
+  role: "ADMIN" | "BILLER" | "INVENTORY_MANAGER";
 };

@@ -1,84 +1,80 @@
-// import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
-// import type { Bill, BillRequest } from "../types/bill";
-// import type { CustomResponse } from "../types/custom-response";
-// import { generateError } from "../utils";
-// import { axiosInstance } from "./axios-config";
+import type { Bill, BillRequest } from "../types/bill";
+import type { CustomResponse } from "../types/custom-response";
+import { generateError } from "../utils";
+import { axiosInstance } from "./axios-config";
 
 // // TODO : Finalize backend routes in BillingController
 
-// export const time = async (): Promise<CustomResponse<Date>> => {
-//   try {
-//     const response: CustomResponse<Date> = await axiosInstance.get(
-//       "/billing/time"
-//     );
+export const time = async (): Promise<CustomResponse<Date>> => {
+  try {
+    const response: AxiosResponse = await axiosInstance.get("/billing/time");
 
-//     return response;
-//   } catch (e) {
-//     if (e instanceof AxiosError) {
-//       throw new Error(generateError(e.response!));
-//     }
-//     throw new Error("Some error occurred.");
-//   }
-// };
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};
 
-// export const getBill = async (itemId: number) => {
-//   try {
-//     const response: CustomResponse<Date> = await axiosInstance.get(
-//       "/billing/bills"
-//     );
+export const getBill = async (itemId: number) => {
+  try {
+    const response: AxiosResponse = await axiosInstance.get(
+      `/billing/${itemId}`
+    );
 
-//     return response;
-//   } catch (e) {
-//     if (e instanceof AxiosError) {
-//       throw new Error(generateError(e.response!));
-//     }
-//     throw new Error("Some error occurred.");
-//   }
-// };
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};
 
-// export const getItems = async () => {
-//   try {
-//     const response: CustomResponse<Date> = await axiosInstance.get(
-//       "/billing/time"
-//     );
+export const getAllBills = async (): Promise<CustomResponse<Array<Bill>>> => {
+  try {
+    const response: AxiosResponse = await axiosInstance.get("/billing/bills");
 
-//     return response;
-//   } catch (e) {
-//     if (e instanceof AxiosError) {
-//       throw new Error(generateError(e.response!));
-//     }
-//     throw new Error("Some error occurred.");
-//   }
-// };
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};
 
-// export const getItemById = async (billId: number) => {
-//   try {
-//     const response: CustomResponse<Date> = await axiosInstance.get(
-//       `/billing/billId/${billId}`
-//     );
+export const getBillById = async (billId: number) => {
+  try {
+    const response: AxiosResponse = await axiosInstance.get(
+      `/billing?id=${billId}`
+    );
 
-//     return response;
-//   } catch (e) {
-//     if (e instanceof AxiosError) {
-//       throw new Error(generateError(e.response!));
-//     }
-//     throw new Error("Some error occurred.");
-//   }
-// };
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};
 
-// export const addItem = async (bill: BillRequest) => {
-//   try {
-//     const response: CustomResponse<Date> = await axiosInstance.post(
-//       "/billing/addBill",
-//       bill
-//     );
+export const addBill = async (bill: BillRequest) => {
+  try {
+    const response: AxiosResponse = await axiosInstance.post(
+      "/billing/addBill",
+      bill
+    );
 
-//     return response;
-//   } catch (e) {
-//     if (e instanceof AxiosError) {
-//       throw new Error(generateError(e.response!));
-//     }
-//     throw new Error("Some error occurred.");
-//   }
-// };
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};

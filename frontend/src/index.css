@@ -4,10 +4,10 @@
 
 @font-face {
   font-family: "Raleway";
-  src: url("./fonts/Raleway-VariableFont_wght.ttf");
+  src: url("/fonts/Raleway-VariableFont_wght.ttf");
 }
 
 @font-face {
   font-family: "Exo";
-  src: url("./fonts/Exo-VariableFont_wght.ttf");
+  src: url("/fonts/Exo-VariableFont_wght.ttf");
 }

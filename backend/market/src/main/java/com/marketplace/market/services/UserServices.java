@@ -13,10 +13,11 @@ import jakarta.transaction.Transactional;
 
 @Transactional
 public interface UserServices extends JpaRepository<User, Integer> {
-	
-	public Optional<User> findByEmail(String email);
+
+    public Optional<User> findByEmail(String email);
+
     @Modifying
     @Query("UPDATE User u SET u.email = :email, u.password = :password, u.name = :name, u.role = :role WHERE u.id = :id")
     void updateUserById(@Param("id") int id, @Param("email") String email, @Param("password") String password,
-            @Param("name") String name, @Param("role") int role);
+            @Param("name") String name, @Param("role") String role);
 }

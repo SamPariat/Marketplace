@@ -1,4 +1,5 @@
 import { BiCategory } from "react-icons/bi";
+import { CgProfile } from "react-icons/cg";
 import { FaIndianRupeeSign, FaReact } from "react-icons/fa6";
 import { FiShoppingCart } from "react-icons/fi";
 import { TbHomeDot, TbLogin, TbLogout } from "react-icons/tb";
@@ -18,17 +19,14 @@ const SideBar = () => {
       </div>
       <div className="mt-10">
         <SideBarLinks icon={TbHomeDot} text="Home" linkTo="" />
-        <SideBarLinks
-          icon={BiCategory}
-          text="Categories"
-          linkTo="/categories"
-        />
+        <SideBarLinks icon={BiCategory} text="Categories" linkTo="categories" />
         <SideBarLinks
           icon={FaIndianRupeeSign}
           text="Billing"
-          linkTo="/billing"
+          linkTo="billing"
         />
-        <SideBarLinks icon={FiShoppingCart} text="Items" linkTo="/items" />
+        <SideBarLinks icon={FiShoppingCart} text="Items" linkTo="items" />
+        <SideBarLinks icon={CgProfile} text="Profile" linkTo="profile" />
       </div>
       <div className="absolute bottom-0">
         <SideBarLinks icon={TbLogin} text="Login" linkTo="/login" />

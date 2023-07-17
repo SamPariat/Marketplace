@@ -5,14 +5,15 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class User implements UserDetails{
-	
+public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -23,7 +24,8 @@ public class User implements UserDetails{
 
     private String name;
 
-    private int role;
+    @Column(columnDefinition = "VARCHAR(20) CHECK (role IN ('ADMIN', 'BILLER', 'INVENTORY_MANAGER'))")
+    private String role;
 
     public int getId() {
         return id;
@@ -57,22 +59,22 @@ public class User implements UserDetails{
         this.name = name;
     }
 
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
-
     public User() {
     }
 
-    public User(int id, String email, String password, String name, int role) {
+    public User(int id, String email, String password, String name, String role) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -82,41 +84,40 @@ public class User implements UserDetails{
                 + "]";
     }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return this.email;
-	}
+    @Override
+    public String getUsername() {
+        // TODO Auto-generated method stub
+        return this.email;
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    @Override
+    public boolean isAccountNonExpired() {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    @Override
+    public boolean isAccountNonLocked() {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-    
+    @Override
+    public boolean isEnabled() {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
 }

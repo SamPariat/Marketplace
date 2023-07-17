@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export type Item = {
   itemId: number;
   name: string;
@@ -6,6 +8,7 @@ export type Item = {
   active: boolean;
   discountPer: number;
   discountPrice: number;
+  category: Category;
 };
 
 export type ItemRequest = {

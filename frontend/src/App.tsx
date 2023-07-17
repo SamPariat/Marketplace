@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 
 import BillingPage from "./pages/BillingPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import ItemDetailsPage from "./pages/ItemDetailsPage";
 import ItemsPage from "./pages/ItemsPage";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
@@ -16,7 +17,13 @@ const App = () => {
       element: <MainPage />,
       children: [
         { path: "billing", element: <BillingPage /> },
-        { path: "items", element: <ItemsPage /> },
+        {
+          path: "items",
+          children: [
+            { index: true, element: <ItemsPage /> },
+            { path: ":itemId", element: <ItemDetailsPage /> },
+          ],
+        },
         { path: "categories", element: <CategoriesPage /> },
       ],
     },
@@ -29,8 +36,12 @@ const App = () => {
   return (
     <>
       <ToastContainer
-        autoClose={5000}
-        theme="dark"
+        autoClose={2000}
+        theme={
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light"
+        }
         draggable
         pauseOnHover={false}
         bodyStyle={{
@@ -38,7 +49,7 @@ const App = () => {
         }}
         limit={3}
       />
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </>
   );
 };

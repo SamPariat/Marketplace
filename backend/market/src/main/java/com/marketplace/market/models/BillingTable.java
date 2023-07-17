@@ -20,7 +20,6 @@ public class BillingTable {
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
-	@JsonIgnore
 	private int billId;
 
 	private int serviceTax;

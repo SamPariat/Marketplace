@@ -2,8 +2,8 @@ import userImg from "../../public/images/user.avif";
 
 const Profile = () => {
   return (
-    <div className="container">
-      <form method="" className="grid grid-cols-3">
+    <div className="container font-exo">
+      <div className="grid grid-cols-3">
         <div className="grid justify-center items-center col-span-1  ">
           <img src={userImg} alt="userImage" className="w-48 pt-20" />
         </div>
@@ -68,7 +68,7 @@ const Profile = () => {
             </form>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

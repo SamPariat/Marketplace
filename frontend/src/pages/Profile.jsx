@@ -1,9 +1,9 @@
-import userImg from "../../public/images/user.avif";
+import userImg from "../images/user.avif";
 
 const Profile = () => {
   return (
-    <div className="container">
-      <form method="" className="grid grid-cols-3">
+    <div className="flex flex-grow font-exo m-auto">
+      <div className="grid grid-cols-3">
         <div className="grid justify-center items-center col-span-1  ">
           <img src={userImg} alt="userImage" className="w-48 pt-20" />
         </div>
@@ -29,7 +29,7 @@ const Profile = () => {
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline"
-                  id="username"
+                  name="username"
                   type="text"
                   placeholder="Username"
                 />
@@ -37,13 +37,13 @@ const Profile = () => {
               <div className="mb-4">
                 <label
                   className="block text-gray-700 dark:text-gray-200 text-xl font-bold mb-2"
-                  htmlFor="username"
+                  htmlFor="billerId"
                 >
                   Biller Id
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="username"
+                  name="billerId"
                   type="text"
                   placeholder="Biller Id"
                 />
@@ -57,9 +57,21 @@ const Profile = () => {
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                  id="password"
+                  name="password"
                   type="password"
                   placeholder="****************"
+                />
+                <label
+                  className="block text-gray-700 dark:text-gray-200 text-xl font-bold mb-2"
+                  htmlFor="role"
+                >
+                  Role
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  name="role"
+                  type="text"
+                  placeholder="Role"
                 />
               </div>
               <button className="bg-slate-700 dark:bg-slate-500 hover:bg-slate-900 dark:hover:bg-slate-700 text-white font-bold py-2 px-7 border border-slate-500 rounded ">
@@ -68,7 +80,7 @@ const Profile = () => {
             </form>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

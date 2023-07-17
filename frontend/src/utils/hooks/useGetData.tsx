@@ -1,29 +1,29 @@
-import { AxiosError } from "axios";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-import { CustomResponse } from "../../types/custom-response";
 import { handleError } from "..";
+import { CustomResponse } from "../../types/custom-response";
 
 /**
  * Custom hook for handling get requests while displaying a toast depending on the state of the promise
+ * @type T
  * @param {() => Promise<CustomResponse<any>>} getterFunction - Takes in a callback containing one of the 'GET' method api requests
  *
- * @returns An object in the form { data: Array<any> or null }
+ * @returns An object in the form { data: T or null }
  */
-const useGetData = (
-  getterFunction: () => Promise<CustomResponse<any>>
-): { data: Array<any> | any | null } => {
-  const [data, setData] = useState<Array<any> | any | null>(null);
+const useGetData = <T extends any>(
+  getterFunction: () => Promise<CustomResponse<T>>
+): { data: T | null } => {
+  const [data, setData] = useState<T | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await toast.promise(getterFunction, {
-          pending: "Request pending...",
-          success: "Found response",
-          error: "Some error occurred",
-        });
+        const response = await getterFunction();
+
+        if (Array.isArray(response.data) && response.data.length === 0) {
+          toast.info("No data present");
+        }
 
         if (response.error) {
           handleError(response.error);
@@ -31,9 +31,8 @@ const useGetData = (
 
         setData(response.data);
       } catch (error) {
-        if (error instanceof AxiosError) {
-          throw new AxiosError(error.message);
-        } else if (error instanceof Error) {
+        if (error instanceof Error) {
+          toast.error(error.message || "Servers may be down. Try again later.");
           throw new Error(error.message);
         }
       }

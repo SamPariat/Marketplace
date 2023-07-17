@@ -1,13 +1,18 @@
-import { Outlet } from "react-router-dom";
+import { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import { getItems } from "../api/item-api";
+import Button from "../components/buttons/Button";
+import { Item } from "../types/item";
 import useGetData from "../utils/hooks/useGetData";
 
 const ItemsPage = () => {
+  const [isAdding, setIsAdding] = useState<boolean>(false);
   const { data: items } = useGetData(getItems);
+  const navigate = useNavigate();
 
   return (
-    <div className="flex flex-grow items-center justify-center">
+    <div className="flex flex-grow flex-col items-center justify-center">
       <Outlet />
       <table className="table-auto slate-900 dark:text-slate-200 font-exo text-sm border border-slate-500 border-separate">
         <thead className="font-semibold">
@@ -39,8 +44,12 @@ const ItemsPage = () => {
           </tr>
         </thead>
         <tbody>
-          {items?.map((item) => (
-            <tr key={item.itemId}>
+          {items?.map((item: Item) => (
+            <tr
+              key={item.itemId}
+              onClick={() => navigate(`/categories/${item.category.id}`)}
+              className="hover:cursor-pointer"
+            >
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
                 {item.itemId}
               </td>
@@ -69,6 +78,13 @@ const ItemsPage = () => {
           ))}
         </tbody>
       </table>
+
+      <Button
+        text={!isAdding ? "Add Item" : "Cancel"}
+        clickHandler={() => setIsAdding(!isAdding)}
+      />
+
+      {isAdding && <p>Form khulega</p>}
     </div>
   );
 };

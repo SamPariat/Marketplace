@@ -1,3 +1,5 @@
+import type { Item } from "./item";
+
 export type Bill = {
   billId: number;
   serviceTax: number;
@@ -8,6 +10,7 @@ export type Bill = {
   totalAmount: number;
   timeStamp: Date;
   billerId: number;
+  items: Array<Item>;
 };
 
 export type BillRequest = {

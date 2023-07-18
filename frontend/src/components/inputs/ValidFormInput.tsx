@@ -5,9 +5,10 @@ import ErrorText from "./ErrorText";
 type ValidFormInputProps = {
   name: string;
   label: string;
+  type: "text" | "password";
 } & FieldAttributes<any>;
 
-const ValidFormInput = ({ name, label }: ValidFormInputProps) => {
+const ValidFormInput = ({ name, label, type }: ValidFormInputProps) => {
   return (
     <div className="flex flex-col mx-2 my-2">
       <span className="flex items-center">
@@ -20,6 +21,7 @@ const ValidFormInput = ({ name, label }: ValidFormInputProps) => {
         <Field
           name={name}
           className="w-full py-2 px-2 bg-blue-100 dark:bg-slate-600"
+          type={type}
         />
       </span>
       <ErrorMessage name={name}>

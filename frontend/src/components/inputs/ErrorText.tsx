@@ -5,7 +5,7 @@ type ErrorTextProps = {
 /**
  *
  * @param text - The error text
- * @returns A resusable error text template that can be used with Formik
+ * @returns A reusable error text template that can be used with Formik
  */
 const ErrorText = ({ text }: ErrorTextProps) => {
   return <p className="text-sm text-red-400">{text}</p>;

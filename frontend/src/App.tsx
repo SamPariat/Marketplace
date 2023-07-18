@@ -10,6 +10,8 @@ import MainPage from "./pages/MainPage";
 import Profile from "./pages/Profile";
 
 import "react-toastify/dist/ReactToastify.min.css";
+import BillDetailsPage from "./pages/BillDetailsPage";
+import CategoryDetailsPage from "./pages/CategoryDetailsPage";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -17,7 +19,16 @@ const App = () => {
       path: "/",
       element: <MainPage />,
       children: [
-        { path: "billing", element: <BillingPage /> },
+        {
+          path: "billing",
+          children: [
+            { index: true, element: <BillingPage /> },
+            {
+              path: ":billId",
+              element: <BillDetailsPage />,
+            },
+          ],
+        },
         {
           path: "items",
           children: [
@@ -25,7 +36,13 @@ const App = () => {
             { path: ":itemId", element: <ItemDetailsPage /> },
           ],
         },
-        { path: "categories", element: <CategoriesPage /> },
+        {
+          path: "categories",
+          children: [
+            { index: true, element: <CategoriesPage /> },
+            { path: ":categoryId", element: <CategoryDetailsPage /> },
+          ],
+        },
         { path: "profile", element: <Profile /> },
       ],
     },
@@ -38,7 +55,7 @@ const App = () => {
   return (
     <>
       <ToastContainer
-        autoClose={2000}
+        autoClose={false}
         theme={
           window.matchMedia("(prefers-color-scheme: dark)").matches
             ? "dark"

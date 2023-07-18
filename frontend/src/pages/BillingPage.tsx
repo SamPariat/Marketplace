@@ -1,14 +1,19 @@
-import useGetData from "../utils/hooks/useGetData";
+import { useState } from "react";
+import { Outlet, useNavigate } from "react-router";
+
 import { getAllBills } from "../api/billing-api";
+import Button from "../components/buttons/Button";
 import type { Bill } from "../types/bill";
+import useGetData from "../utils/hooks/useGetData";
 
 const BillingPage = () => {
+  const [isAdding, setIsAdding] = useState<boolean>(false);
   const { data: bills } = useGetData(getAllBills);
-
-  console.log(bills);
+  const navigate = useNavigate();
 
   return (
-    <div className="flex flex-grow items-center justify-center">
+    <div className="flex flex-grow flex-col items-center justify-center">
+      <Outlet />
       <table className="table-auto slate-900 dark:text-slate-200 font-exo text-sm border border-slate-500 border-separate">
         <thead className="font-semibold">
           <tr>
@@ -40,7 +45,11 @@ const BillingPage = () => {
         </thead>
         <tbody>
           {bills?.map((bill: Bill) => (
-            <tr key={bill.billId}>
+            <tr
+              key={bill.billId}
+              className="hover:cursor-pointer"
+              onClick={() => navigate(`${bill.billId}`)}
+            >
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
                 {bill.billId}
               </td>
@@ -69,6 +78,13 @@ const BillingPage = () => {
           ))}
         </tbody>
       </table>
+
+      <Button
+        text={!isAdding ? "Create Bill" : "Cancel"}
+        clickHandler={() => setIsAdding(!isAdding)}
+      />
+
+      {isAdding && <p>Form khulega</p>}
     </div>
   );
 };

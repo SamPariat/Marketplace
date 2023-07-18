@@ -8,6 +8,13 @@ type ValidFormInputProps = {
   type: "text" | "password";
 } & FieldAttributes<any>;
 
+/**
+ * 
+ * @param name The attribute name applied in the label
+ * @param label The label to display
+ * @param type The input type
+ * @returns A reusable Formik input field
+ */
 const ValidFormInput = ({ name, label, type }: ValidFormInputProps) => {
   return (
     <div className="flex flex-col mx-2 my-2">

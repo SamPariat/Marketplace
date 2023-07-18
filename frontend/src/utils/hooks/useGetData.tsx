@@ -7,11 +7,11 @@ import { CustomResponse } from "../../types/custom-response";
 /**
  * Custom hook for handling get requests while displaying a toast depending on the state of the promise
  * @type T
- * @param {() => Promise<CustomResponse<any>>} getterFunction - Takes in a callback containing one of the 'GET' method api requests
+ * @param getterFunction - Takes in a callback containing one of the 'GET' method api requests
  *
  * @returns An object in the form { data: T or null }
  */
-const useGetData = <T extends any>(
+const useGetData = <T extends unknown>(
   getterFunction: () => Promise<CustomResponse<T>>
 ): { data: T | null } => {
   const [data, setData] = useState<T | null>(null);

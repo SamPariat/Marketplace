@@ -8,7 +8,7 @@ import useGetData from "../utils/hooks/useGetData";
 
 const CategoriesPage = () => {
   const [isAdding, setIsAdding] = useState<boolean>(false);
-  const { data: categories } = useGetData(getAllCategories);
+  const { data: categories } = useGetData<Array<Category>>(getAllCategories);
 
   return (
     <div className="flex flex-grow flex-col items-center justify-center">
@@ -46,8 +46,9 @@ const CategoriesPage = () => {
       )}
 
       {isAdding && <AddCategoryForm />}
-      
+
       <Button
+        type={undefined}
         text={!isAdding ? "Add Category" : "Cancel"}
         clickHandler={() => setIsAdding(!isAdding)}
       />

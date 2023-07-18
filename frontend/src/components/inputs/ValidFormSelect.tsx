@@ -11,6 +11,13 @@ type ValidFormSelectProps = {
   label: string;
 };
 
+/**
+ * 
+ * @param name The attribute name applied in the label
+ * @param options An array of options objects containing it's value and text
+ * @param label The label to display
+ * @returns A reusable Formik select field
+ */
 const ValidFormSelect = ({ name, options, label }: ValidFormSelectProps) => {
   return (
     <div className="flex flex-col mx-2 my-2">
@@ -27,11 +34,13 @@ const ValidFormSelect = ({ name, options, label }: ValidFormSelectProps) => {
           as="select"
         >
           {options.map((option) => (
-            <option value={option.value}>{option.text}</option>
+            <option value={option.value} key={option.text}>
+              {option.text}
+            </option>
           ))}
         </Field>
 
-        <ErrorMessage name="isTaxApplicable">
+        <ErrorMessage name={name}>
           {(errorMsg) => <ErrorText text={errorMsg} />}
         </ErrorMessage>
       </span>

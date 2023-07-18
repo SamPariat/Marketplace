@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 
 import { getAllBills } from "../api/billing-api";
@@ -7,7 +6,6 @@ import type { Bill } from "../types/bill";
 import useGetData from "../utils/hooks/useGetData";
 
 const BillingPage = () => {
-  const [isAdding, setIsAdding] = useState<boolean>(false);
   const { data: bills } = useGetData(getAllBills);
   const navigate = useNavigate();
 
@@ -80,11 +78,10 @@ const BillingPage = () => {
       </table>
 
       <Button
-        text={!isAdding ? "Create Bill" : "Cancel"}
-        clickHandler={() => setIsAdding(!isAdding)}
+        type={undefined}
+        text="Create bill"
+        clickHandler={() => navigate("new-bill")}
       />
-
-      {isAdding && <p>Form khulega</p>}
     </div>
   );
 };

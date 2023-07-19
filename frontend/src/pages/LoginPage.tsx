@@ -23,7 +23,7 @@ const LoginPage = ({}: LoginPageProps) => {
   };
 
   return (
-    <div className="font-exo w-3/4 h-full m-auto">
+    <div className="font-exo w-3/4 h-screen m-auto">
       <form
         method="post"
         className="flex flex-col h-full items-center justify-center"

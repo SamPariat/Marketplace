@@ -3,7 +3,9 @@ import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.min.css";
 
-import AddBillFormPage from "./pages/AddBillFormPage";
+import AddBillFormPage, {
+  loader as addBillLoader,
+} from "./pages/AddBillFormPage";
 import BillDetailsPage from "./pages/BillDetailsPage";
 import BillingPage from "./pages/BillingPage";
 import CategoriesPage from "./pages/CategoriesPage";
@@ -31,6 +33,7 @@ const App = () => {
             {
               path: "new-bill",
               element: <AddBillFormPage />,
+              loader: addBillLoader,
             },
           ],
         },
@@ -61,11 +64,7 @@ const App = () => {
     <>
       <ToastContainer
         autoClose={false}
-        theme={
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light"
-        }
+        theme="colored"
         draggable
         pauseOnHover={false}
         bodyStyle={{

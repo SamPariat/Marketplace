@@ -1,7 +1,9 @@
 import { FormEvent, useState } from "react";
+import { toast } from "react-toastify";
 
 import InputWithLabel from "../components/inputs/InputWithLabel";
 import { login } from "../api/auth-api";
+import { handleError } from "../utils";
 
 type LoginPageProps = {};
 
@@ -16,10 +18,22 @@ const LoginPage = ({}: LoginPageProps) => {
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    await login({
-      email,
-      password,
-    });
+    try {
+      const response = await login({
+        email,
+        password,
+      });
+
+      if (response.error) {
+        handleError(response.error);
+      }
+
+      toast.success("Logged in successfully.");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   };
 
   return (

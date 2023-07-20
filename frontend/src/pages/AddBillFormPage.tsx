@@ -1,5 +1,6 @@
 import { Suspense, useMemo, useState } from "react";
 import { Await, defer, useLoaderData } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 
 import { getItems } from "../api/item-api";
 import BillItem from "../components/cards/BillItem";
@@ -52,13 +53,17 @@ const AddBillForm = () => {
 
       <div className="col-span-1 flex flex-col font-exo text-slate-900 dark:text-slate-200 mr-4 my-4 gap-2">
         <div className="grid grid-cols-1 gap-2 h-auto py-4 bg-slate-200 dark:bg-slate-800 rounded-md">
-          {Object.keys(itemAndQty).map((itemName) => (
-            <BillItem
-              name={itemName}
-              quantity={itemAndQty[itemName].qty}
-              totalPrice={itemAndQty[itemName].amt}
-              key={itemName}
-            />
+          {Object.keys(itemAndQty).map((itemName, index) => (
+            <AnimatePresence key={index}>
+              {itemAndQty[itemName].qty > 0 && (
+                <BillItem
+                  name={itemName}
+                  quantity={itemAndQty[itemName].qty}
+                  totalPrice={itemAndQty[itemName].amt}
+                  key={itemName}
+                />
+              )}
+            </AnimatePresence>
           ))}
         </div>
         <CalculateCard

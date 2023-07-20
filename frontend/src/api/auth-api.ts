@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 import { axiosInstance } from "./axios-config";
 import type { CustomResponse } from "../types/custom-response";
@@ -9,7 +9,7 @@ export const login = async (
   loginRequest: LoginRequest
 ): Promise<CustomResponse<LoginResponse>> => {
   try {
-    const response: CustomResponse<LoginResponse> = await axiosInstance.post(
+    const response: AxiosResponse = await axiosInstance.post(
       "/auth/login",
       loginRequest
     );
@@ -24,7 +24,7 @@ export const login = async (
       })
     );
 
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw new Error(generateError(e.response!));

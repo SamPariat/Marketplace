@@ -47,7 +47,7 @@ const ItemsPage = () => {
           {items?.map((item: Item) => (
             <tr
               key={item.itemId}
-              onClick={() => navigate(`/categories/${item.category.id}`)}
+              onClick={() => navigate(`${item.itemId}`)}
               className="hover:cursor-pointer"
             >
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
@@ -81,6 +81,7 @@ const ItemsPage = () => {
 
       <Button
         text={!isAdding ? "Add Item" : "Cancel"}
+        type={undefined}
         clickHandler={() => setIsAdding(!isAdding)}
       />
 

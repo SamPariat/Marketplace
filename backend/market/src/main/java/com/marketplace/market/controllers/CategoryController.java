@@ -69,6 +69,11 @@ public class CategoryController {
     @PostMapping(path = "/add-category")
     public ResponseEntity<CustomResponse<Category>> addCategory(@RequestBody Category category) {
         try {
+            if (categoryServices.existsById(category.getId())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new CustomResponse<Category>(null, "The category already exists.",
+                                "Existing category cannot be re-added."));
+            }
             categoryServices.save(category);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new CustomResponse<Category>(category, "Successfully added the category.", null));
@@ -110,7 +115,8 @@ public class CategoryController {
                         .body(new CustomResponse<Category>(null, null, "Requested category does not exist."));
             }
 
-            categoryServices.updateCategoryById(categoryId, category.getName(), category.getIsTaxApplicable(),category.getTax(),category.getServiceTax());
+            categoryServices.updateCategoryById(categoryId, category.getName(), category.getIsTaxApplicable(),
+                    category.getTax(), category.getServiceTax());
 
             Category updatedCategory = new Category(
                     categoryId,

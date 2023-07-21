@@ -8,7 +8,7 @@ import SideBarLinks from "./SideBarLinks";
 
 const SideBar = () => {
   return (
-    <div className="flex flex-col w-1/3 lg:w-1/5 bg-slate-200 dark:bg-slate-900 text-slate-200 dark:text-slate-900 min-h-screen relative shadow-lg top-0 left-0">
+    <div className="flex flex-col w-1/3 lg:w-1/5 bg-slate-200 dark:bg-slate-900 text-slate-200 dark:text-slate-900 min-h-screen relative shadow-2xl top-0 left-0">
       <div className="w-full">
         <span className="flex flex-row justify-center text-3xl space-x-2 mt-10">
           <FaReact className="text-slate-900 dark:text-slate-200" />

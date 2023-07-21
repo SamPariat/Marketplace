@@ -85,6 +85,7 @@ const ItemsPage = () => {
 
       <Button
         text={!isAdding ? "Add Item" : "Cancel"}
+        type={undefined}
         clickHandler={() => setIsAdding(!isAdding)}
       />
     </div>

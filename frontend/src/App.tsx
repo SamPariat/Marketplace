@@ -1,17 +1,20 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.min.css";
+
+import AddBillFormPage, {
+  loader as addBillLoader,
+} from "./pages/AddBillFormPage";
+import BillDetailsPage from "./pages/BillDetailsPage";
 import BillingPage from "./pages/BillingPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import CategoryDetailsPage from "./pages/CategoryDetailsPage";
 import ItemDetailsPage from "./pages/ItemDetailsPage";
 import ItemsPage from "./pages/ItemsPage";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import Profile from "./pages/Profile";
-
-import "react-toastify/dist/ReactToastify.min.css";
-import BillDetailsPage from "./pages/BillDetailsPage";
-import CategoryDetailsPage from "./pages/CategoryDetailsPage";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -26,6 +29,11 @@ const App = () => {
             {
               path: ":billId",
               element: <BillDetailsPage />,
+            },
+            {
+              path: "new-bill",
+              element: <AddBillFormPage />,
+              loader: addBillLoader,
             },
           ],
         },
@@ -56,11 +64,7 @@ const App = () => {
     <>
       <ToastContainer
         autoClose={false}
-        theme={
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light"
-        }
+        theme="colored"
         draggable
         pauseOnHover={false}
         bodyStyle={{

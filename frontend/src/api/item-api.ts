@@ -6,8 +6,6 @@ import type { CustomResponse } from "../types/custom-response";
 import type { Item, ItemRequest } from "../types/item";
 import { generateError } from "../utils";
 
-// TODO : Update ItemController for this file
-
 export const getItems = async (): Promise<CustomResponse<Array<Item>>> => {
   try {
     const response: AxiosResponse = await axiosInstance.get("/item/all");

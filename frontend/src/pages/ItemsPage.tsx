@@ -14,7 +14,7 @@ const ItemsPage = () => {
 
   return (
     <div className="flex flex-grow flex-col items-center justify-center">
-      <Outlet/>
+      <Outlet />
       {!isAdding && (
         <table className="table-auto slate-900 dark:text-slate-200 font-exo text-sm border border-slate-500 border-separate">
           <thead className="font-semibold">

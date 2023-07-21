@@ -51,7 +51,8 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CustomResponse<LoginResponse>(response, "User logged in successfully.", null));
         } catch (UsernameNotFoundException unfe) {
-            return null;
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new CustomResponse<LoginResponse>(null, "User does not exist.", unfe.getMessage()));
         } catch (BadCredentialsException bce) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CustomResponse<LoginResponse>(null,
                     "Entered credentials are invalid. Either email or password entered is wrong.", bce.getMessage()));

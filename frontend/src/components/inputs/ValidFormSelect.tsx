@@ -24,7 +24,7 @@ const ValidFormSelect = ({ name, options, label }: ValidFormSelectProps) => {
       <span className="flex items-center">
         <label
           htmlFor={name}
-          className="font-semibold px-6 py-2 inline-block w-64 bg-blue-400 dark:bg-slate-700"
+          className="w-full font-semibold px-6 py-2 inline-block bg-blue-400 dark:bg-slate-700"
         >
           {label}
         </label>

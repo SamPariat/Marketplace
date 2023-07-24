@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 import AddBillFormPage, {
   loader as addBillLoader,
-} from "./pages/AddBillFormPage";
+} from "./components/forms/AddBillFormPage";
 import BillDetailsPage from "./pages/BillDetailsPage";
 import BillingPage from "./pages/BillingPage";
 import CategoriesPage from "./pages/CategoriesPage";
@@ -15,6 +15,7 @@ import ItemsPage from "./pages/ItemsPage";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import Profile from "./pages/Profile";
+import AddConsumerForm from "./components/forms/AddConsumerForm";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const App = () => {
               path: "new-bill",
               element: <AddBillFormPage />,
               loader: addBillLoader,
+            },
+            {
+              path: "consumer",
+              element:<AddConsumerForm/>
             },
           ],
         },

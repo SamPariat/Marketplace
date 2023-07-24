@@ -2,11 +2,11 @@ import { Suspense, useMemo, useState } from "react";
 import { Await, defer, useLoaderData } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
-import { getItems } from "../api/item-api";
-import BillItem from "../components/cards/BillItem";
-import CalculateCard from "../components/cards/CalculateCard";
-import ItemCard from "../components/cards/ItemCard";
-import type { Item } from "../types/item";
+import { getItems } from "../../api/item-api";
+import BillItem from "../cards/BillItem";
+import CalculateCard from "../cards/CalculateCard";
+import ItemCard from "../cards/ItemCard";
+import type { Item } from "../../types/item";
 
 export type Quantity = {
   [key: string]: { qty: number; amt: number };

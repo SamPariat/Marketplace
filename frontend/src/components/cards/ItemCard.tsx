@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { toast } from "react-toastify";
 
-import type { Quantity } from "../../pages/AddBillFormPage";
+import type { Quantity } from "../forms/AddBillFormPage";
 
 type ItemCardProps = {
   name: string;

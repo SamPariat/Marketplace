@@ -1,10 +1,12 @@
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
+import { getAllCategories } from "../../api/category-api";
 
 import type { Item } from "../../types/item";
 import Button from "../buttons/Button";
 import ValidFormInput from "../inputs/ValidFormInput";
 import ValidFormSelect from "../inputs/ValidFormSelect";
+import useGetData from "../../utils/hooks/useGetData";
 
 const categoryValidationSchema = Yup.object({
   itemId: Yup.string()
@@ -43,10 +45,15 @@ const initialValues: Item = {
   active: false,
   discountPer: 0,
   discountPrice: 0,
-  category: {},
+  category:{},
 };
 
 const AddItemForm = () => {
+  const { data} = useGetData(getAllCategories );
+  if (data === null) {
+    return <p>Loading categories...</p>;
+  }
+
   return (
     <div className="flex flex-col items-center justify-center font-exo dark:bg-slate-900 rounded-lg py-2">
       <Formik
@@ -82,7 +89,13 @@ const AddItemForm = () => {
               name="discountPer"
               type="number"
             />
-            <ValidFormInput label="Category" name="category" type="text" />
+            <ValidFormSelect
+              label="Category"
+              name="category"
+              options={data.map((category) => ({
+                text: category.name,
+              }))}
+            />
             <Button
               text="Submit"
               type="submit"

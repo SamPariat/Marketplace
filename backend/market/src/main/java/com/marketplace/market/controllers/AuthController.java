@@ -18,6 +18,8 @@ import com.marketplace.market.authentication.JwtHelper;
 import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.models.LoginRequest;
 import com.marketplace.market.models.LoginResponse;
+import com.marketplace.market.models.User;
+import com.marketplace.market.services.UserServices;
 
 @RestController
 @RequestMapping("/auth")
@@ -32,6 +34,9 @@ public class AuthController {
     @Autowired
     private JwtHelper jwtHelper;
 
+    @Autowired
+    private UserServices userServices;
+
     @PostMapping("/login")
     public ResponseEntity<CustomResponse<LoginResponse>> login(@RequestBody LoginRequest loginRequest) {
         try {
@@ -41,12 +46,18 @@ public class AuthController {
             // UsernameNotFoundException
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
 
+            User user = userServices.findByEmail(userDetails.getUsername()).get();
+
+            if (user == null) {
+                throw new UsernameNotFoundException("User with specified email not found.");
+            }
+
             // Generate the token if the user exists
             String token = jwtHelper.generateToken(userDetails);
 
             LoginResponse response = LoginResponse.builder()
                     .jwtToken(token)
-                    .email(userDetails.getUsername()).build();
+                    .email(userDetails.getUsername()).role(user.getRole()).name(user.getName()).build();
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CustomResponse<LoginResponse>(response, "User logged in successfully.", null));

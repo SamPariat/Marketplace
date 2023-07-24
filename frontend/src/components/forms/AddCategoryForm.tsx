@@ -9,18 +9,13 @@ import ValidFormInput from "../inputs/ValidFormInput";
 import ValidFormSelect from "../inputs/ValidFormSelect";
 
 const categoryValidationSchema = Yup.object({
-  id: Yup.number()
-    .required("Category ID cannot be empty.")
-    .positive("Category ID must be greater than zero.")
-    .typeError("Category ID must be a number."),
   name: Yup.string()
     .required("Category must have a name.")
-    .matches(/^[a-zA-Z0-9]+$/, "Item ID can only contain letters and numbers."),
+    .matches(/^[a-zA-Z0-9 ]+$/, "Item ID can only contain letters and numbers."),
   isTaxApplicable: Yup.boolean().default(false),
 });
 
 const initialValues: Category = {
-  id: 0,
   name: "",
   isTaxApplicable: false,
 };
@@ -39,7 +34,6 @@ const AddCategoryForm = () => {
       >
         {({ isValid, isSubmitting }) => (
           <Form className="text-slate-900 dark:text-slate-200">
-            <ValidFormInput label="Category ID" name="id" type="text" />
             <ValidFormInput label="Category Name" name="name" type="text" />
             <ValidFormSelect
               label="Is Tax Applicable"

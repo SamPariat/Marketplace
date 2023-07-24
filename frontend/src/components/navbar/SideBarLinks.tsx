@@ -5,9 +5,10 @@ type SideBarLinksProps = {
   icon: IconType;
   text: string;
   linkTo: string;
+  onClick?: React.MouseEventHandler<HTMLSpanElement>;
 };
 
-const SideBarLinks = ({ icon, text, linkTo }: SideBarLinksProps) => {
+const SideBarLinks = ({ icon, text, linkTo, onClick }: SideBarLinksProps) => {
   const Icon = icon;
 
   return (
@@ -19,6 +20,7 @@ const SideBarLinks = ({ icon, text, linkTo }: SideBarLinksProps) => {
               ? "border-b-2 border-b-slate-900 dark:border-b-slate-200"
               : undefined
           }`}
+          onClick={onClick}
         >
           <Icon className="text-slate-900 dark:text-slate-200" />
           <p className="font-exo text-slate-900 dark:text-slate-200">{text}</p>

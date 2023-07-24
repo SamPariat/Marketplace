@@ -14,16 +14,6 @@ export const login = async (
       loginRequest
     );
 
-    const { email, jwtToken: token } = response.data.data;
-
-    localStorage.setItem(
-      "token",
-      JSON.stringify({
-        email,
-        token,
-      })
-    );
-
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {

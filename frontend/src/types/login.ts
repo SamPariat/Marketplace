@@ -4,8 +4,9 @@ export type LoginRequest = {
 };
 
 export type LoginResponse = {
-  data: {
-    jwtToken: string;
-    email: string;
-  };
+  jwtToken: string;
+  username: string;
+  role: string;
+  email: string;
+  name: string;
 };

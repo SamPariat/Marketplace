@@ -1,9 +1,12 @@
-import { FormEvent, useState } from "react";
-import { toast } from "react-toastify";
+import { FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import InputWithLabel from "../components/inputs/InputWithLabel";
-import { login } from "../api/auth-api";
-import { handleError } from "../utils";
+import { RootState } from "../redux";
+import { loginUser, logout } from "../redux/slices/userSlice";
+import { fiveHrs } from "../utils/constants";
+import { useAppDispatch } from "../utils/hooks/useAppDispatch";
+import { useAppSelector } from "../utils/hooks/useAppSelector";
 
 type LoginPageProps = {};
 
@@ -12,28 +15,33 @@ const LoginPage = ({}: LoginPageProps) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [signIn, setSignIn] = useState<boolean>(true);
+  const navigate = useNavigate();
+
+  const token = useAppSelector((state: RootState) => state.user.token);
+  const dispatch = useAppDispatch();
+
+  // Go to the home page after logging in
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [token]);
+
+  // For auto logging out after 5 hours
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(logout());
+    }, fiveHrs);
+  }, [token]);
 
   const toggleMode = (): void => setSignIn(!signIn);
 
-  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    try {
-      const response = await login({
-        email,
-        password,
-      });
+    const request = { email, password };
 
-      if (response.error) {
-        handleError(response.error);
-      }
-
-      toast.success("Logged in successfully.");
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
+    dispatch(loginUser(request));
   };
 
   return (

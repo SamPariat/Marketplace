@@ -1,6 +1,11 @@
 import userImg from "../images/user.avif";
 
+import { RootState } from "../redux";
+import { useAppSelector } from "../utils/hooks/useAppSelector";
+
 const Profile = () => {
+  const user = useAppSelector((state: RootState) => state.user);
+
   return (
     <div className="flex flex-grow font-exo m-auto">
       <div className="grid grid-cols-3">
@@ -10,7 +15,7 @@ const Profile = () => {
         <div className="col-span-2 pt-10 pl-5">
           <div className="grid grid-cols-2 pb-10">
             <h1 className="text-4xl font-Raleway text-slate-900 dark:text-slate-200">
-              Profile Page
+              Profile
             </h1>
             <div className="grid grid-cols-3">
               <button className="bg-transparent dark:bg-slate-500 hover:bg-slate-700 dark:hover:bg-slate-600 text-slate-900 dark:text-slate-200 font-semibold hover:text-white py-2 px-4 border border-slate-500 hover:border-transparent rounded col-span-1 ">
@@ -31,7 +36,7 @@ const Profile = () => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline"
                   name="username"
                   type="text"
-                  placeholder="Username"
+                  placeholder={user.name}
                 />
               </div>
               <div className="mb-4">
@@ -51,15 +56,15 @@ const Profile = () => {
               <div className="mb-6">
                 <label
                   className="block text-gray-700 dark:text-gray-200 text-xl font-bold mb-2"
-                  htmlFor="password"
+                  htmlFor="email"
                 >
-                  Password
+                  Email ID
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                  name="password"
-                  type="password"
-                  placeholder="****************"
+                  name="text"
+                  type="text"
+                  placeholder={user.email}
                 />
                 <label
                   className="block text-gray-700 dark:text-gray-200 text-xl font-bold mb-2"
@@ -71,7 +76,7 @@ const Profile = () => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="role"
                   type="text"
-                  placeholder="Role"
+                  placeholder={user.role}
                 />
               </div>
               <button className="bg-slate-700 dark:bg-slate-500 hover:bg-slate-900 dark:hover:bg-slate-700 text-white font-bold py-2 px-7 border border-slate-500 rounded ">

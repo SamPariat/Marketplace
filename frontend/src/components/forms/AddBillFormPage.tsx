@@ -1,11 +1,11 @@
+import { AnimatePresence } from "framer-motion";
 import { Suspense, useMemo, useState } from "react";
 import { Await, defer, useLoaderData } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 
 import { getItems } from "../../api/item-api";
-import BillItem from "../cards/BillItem";
-import CalculateCard from "../cards/CalculateCard";
-import ItemCard from "../cards/ItemCard";
+import BillItem from "../../components/cards/BillItem";
+import CalculateCard from "../../components/cards/CalculateCard";
+import ItemList from "../../components/cards/ItemList";
 import type { Item } from "../../types/item";
 
 export type Quantity = {
@@ -15,36 +15,36 @@ export type Quantity = {
 const AddBillForm = () => {
   const { items } = useLoaderData() as { items: Array<Item> | null };
   const [itemAndQty, setItemAndQty] = useState<Quantity>({} as Quantity);
+  const [filter, setFilter] = useState<string>("");
 
-  const calculatedTotal = useMemo(() => {
-    let total = 0;
+  const calculatedSubTotal = useMemo(() => {
+    let subtotal = 0;
     Object.keys(itemAndQty).map((itemName) => {
       const { amt } = itemAndQty[itemName];
-      total += amt;
+      subtotal += amt;
     });
-    return total;
+    return subtotal;
   }, [itemAndQty]);
 
   return (
     <div className="grid grid-cols-3 gap-5 grow">
       <div className="col-span-2 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-200">
+        <input
+          type="text"
+          onChange={(event) => setFilter(event.target.value)}
+          placeholder="Enter item name"
+          className="font-raleway bg-slate-200 dark:bg-slate-900 text-slate-900 dark:text-slate-200 px-4 py-2 rounded-md text-center ml-4 mt-4"
+        />
         <div className="grid grid-cols-5 gap-4 text-center px-4 py-4">
           <Suspense fallback={<p className="font-raleway">Loading...</p>}>
             <Await
               resolve={items}
               children={(resolvedItems) => (
-                <>
-                  {resolvedItems?.data?.map((item: Item) => (
-                    <ItemCard
-                      name={item.name}
-                      price={item.price}
-                      stock={item.stock}
-                      itemId={item.itemId}
-                      key={item.itemId}
-                      updateQuantity={setItemAndQty}
-                    />
-                  ))}
-                </>
+                <ItemList
+                  renderedItems={resolvedItems?.data}
+                  updateQuantity={setItemAndQty}
+                  filter={filter}
+                />
               )}
             />
           </Suspense>
@@ -67,9 +67,9 @@ const AddBillForm = () => {
           ))}
         </div>
         <CalculateCard
-          subtotal={calculatedTotal}
+          subtotal={calculatedSubTotal}
           tax={0}
-          total={calculatedTotal}
+          total={calculatedSubTotal}
         />
       </div>
     </div>

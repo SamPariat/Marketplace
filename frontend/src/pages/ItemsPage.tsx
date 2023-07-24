@@ -35,7 +35,7 @@ const ItemsPage = () => {
                 Discount %
               </th>
               <th className="px-6 py-2 border border-slate-500 bg-blue-400 dark:bg-slate-700">
-                Discount Price
+                Cost Price
               </th>
               <th className="px-6 py-2 border border-slate-500 bg-blue-400 dark:bg-slate-700">
                 Active

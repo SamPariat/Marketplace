@@ -1,7 +1,7 @@
-import { Category } from "./category";
+import type { Category } from "./category";
 
 export type Item = {
-  itemId: number;
+  itemId?: number;
   name: string;
   price: number;
   stock: number;
@@ -12,7 +12,7 @@ export type Item = {
 };
 
 export type ItemRequest = {
-  itemId: number;
+  itemId?: number;
   name: string;
   price: number;
   stock: number;

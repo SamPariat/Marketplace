@@ -1,4 +1,8 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.min.css";
@@ -60,9 +64,10 @@ const App = () => {
       ],
     },
     {
-      path: "/login",
+      path: "login",
       element: <LoginPage />,
     },
+    { path: "logout", element: <Navigate to="/login" /> },
   ]);
 
   return (

@@ -3,7 +3,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { axiosInstance } from "./axios-config";
 
 import type { CustomResponse } from "../types/custom-response";
-import type { Item, ItemRequest } from "../types/item";
+import type { Item, ItemRequest, ItemResponse } from "../types/item";
 import { generateError } from "../utils";
 
 export const getItems = async (): Promise<CustomResponse<Array<Item>>> => {
@@ -21,7 +21,7 @@ export const getItems = async (): Promise<CustomResponse<Array<Item>>> => {
 
 export const getItemById = async (
   itemId: number
-): Promise<CustomResponse<Item>> => {
+): Promise<CustomResponse<ItemResponse>> => {
   try {
     const response: AxiosResponse = await axiosInstance.get(`/item/${itemId}`);
 
@@ -56,7 +56,6 @@ export const addItem = async (
   categoryId: number
 ): Promise<CustomResponse<Item>> => {
   const body: ItemRequest = {
-    itemId: item.itemId,
     name: item.name,
     price: item.price,
     stock: item.stock,

@@ -1,7 +1,8 @@
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { getAllCategories } from "../../api/category-api";
 
+import { getAllCategories } from "../../api/category-api";
+import type { Category } from "../../types/category";
 import type { Item } from "../../types/item";
 import Button from "../buttons/Button";
 import ValidFormInput from "../inputs/ValidFormInput";
@@ -9,14 +10,10 @@ import ValidFormSelect from "../inputs/ValidFormSelect";
 import useGetData from "../../utils/hooks/useGetData";
 
 const categoryValidationSchema = Yup.object({
-  itemId: Yup.string()
-    .required("Item ID cannot be empty.")
-    .matches(/^[a-zA-Z0-9]+$/, "Item ID can only contain letters and numbers.")
-    .typeError("Item ID must be a string."),
   name: Yup.string()
     .required("Item must have a name.")
     .matches(
-      /^[a-zA-Z0-9]+$/,
+      /^[a-zA-Z0-9 ]+$/,
       "Item name can only contain letters and numbers."
     ),
   price: Yup.number()
@@ -38,21 +35,20 @@ const categoryValidationSchema = Yup.object({
 });
 
 const initialValues: Item = {
-  itemId: -1,
   name: "",
   price: 0,
   stock: 0,
   active: false,
   discountPer: 0,
   discountPrice: 0,
-  category:{},
+  category: {} as Category,
 };
 
 const AddItemForm = () => {
-  const { data} = useGetData(getAllCategories );
-  if (data === null) {
-    return <p>Loading categories...</p>;
-  }
+  const { data: categories } = useGetData(getAllCategories);
+  const categoryOptions = categories?.map((category) => {
+    return { value: category.id!, text: category.name };
+  });
 
   return (
     <div className="flex flex-col items-center justify-center font-exo dark:bg-slate-900 rounded-lg py-2">
@@ -67,7 +63,6 @@ const AddItemForm = () => {
       >
         {({ isValid, isSubmitting }) => (
           <Form className="text-slate-900 dark:text-slate-200">
-            <ValidFormInput label="Item ID" name="id" type="text" />
             <ValidFormInput label="Item Name" name="name" type="text" />
             <ValidFormInput label="Price" name="price" type="number" />
             <ValidFormInput label="Stock" name="stock" type="number" />
@@ -92,9 +87,7 @@ const AddItemForm = () => {
             <ValidFormSelect
               label="Category"
               name="category"
-              options={data.map((category) => ({
-                text: category.name,
-              }))}
+              options={categoryOptions ? categoryOptions : []}
             />
             <Button
               text="Submit"

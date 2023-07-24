@@ -123,7 +123,8 @@ public class CategoryController {
                     category.getName(),
                     category.getServiceTax(),
                     category.getTax(),
-                    category.getIsTaxApplicable());
+                    category.getIsTaxApplicable(),
+                    category.getItems());
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CustomResponse<Category>(updatedCategory, "Updated category successfully.", null));

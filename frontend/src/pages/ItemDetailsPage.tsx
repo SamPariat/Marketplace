@@ -11,8 +11,6 @@ const ItemDetailsPage = () => {
     getItemById(Number.parseInt(itemId!))
   );
 
-  console.log(item);
-
   return (
     <div className="flex flex-grow justify-center items-center font-exo">
       <div className="bg-slate-200 dark:bg-slate-900 rounded-lg text-slate-900 dark:text-slate-200 w-1/2 px-5 py-5">
@@ -61,7 +59,7 @@ const ItemDetailsPage = () => {
             {item?.discountPrice}
           </p>
         </span>
-        <span className="flex flex-row items-center justify-between my-2">
+        {/* <span className="flex flex-row items-center justify-between my-2">
           <p>Category</p>
           <Link
             to={`/categories/${item?.category.id}`}
@@ -69,21 +67,6 @@ const ItemDetailsPage = () => {
           >
             {item?.category.name}
           </Link>
-        </span>
-        {/* <span className="flex flex-row items-center justify-between my-2">
-          <p>Items</p>
-          <ul className="marker:text-sky-700 dark:marker:text-sky-300 list-disc">
-            {bill?.items.map((item) => (
-              <li key={item.itemId}>
-                <Link
-                  to={`/items/${item.itemId}`}
-                  className="hover:underline underline-offset-2 hover:text-sky-700 dark:hover:text-sky-300"
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
         </span> */}
       </div>
     </div>

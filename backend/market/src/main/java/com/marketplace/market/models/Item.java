@@ -2,17 +2,18 @@ package com.marketplace.market.models;
 
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Item {
-
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	private int itemId;
@@ -29,7 +30,9 @@ public class Item {
 
 	private int discountPrice;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "id", nullable = false)
+	@JsonBackReference // Exclude items when creating the category
 	private Category category;
 
 	@ManyToMany(mappedBy = "items")
@@ -117,8 +120,8 @@ public class Item {
 	@Override
 	public String toString() {
 		return "Item [itemId=" + itemId + ", name=" + name + ", price=" + price + ", stock=" + stock + ", active="
-				+ active + ", discountPer=" + discountPer + ", discountPrice=" + discountPrice + ", category="
-				+ category + "]";
+				+ active + ", discountPer=" + discountPer + ", discountPrice=" + discountPrice + ", category" + category
+				+ "]";
 	}
 
 }

@@ -110,7 +110,7 @@ public class ItemController {
 			}
 
 			Item newItem = new Item(item.getItemId(), item.getName(), item.getPrice(), item.getStock(),
-					item.isActive(), item.getDiscountPer(), item.getDiscountPrice(), category.get());
+					item.isActive(), item.getDiscountPer(), item.getCostPrice(), item.getSupplier(), category.get());
 
 			itemServices.save(newItem);
 
@@ -164,13 +164,15 @@ public class ItemController {
 
 			Item updatedItem = new Item(item.getItemId(), item.getName(), item.getPrice(), item.getStock(),
 					item.isActive(),
-					item.getDiscountPer(), item.getDiscountPrice(), category.get());
+					item.getDiscountPer(), item.getCostPrice(), item.getSupplier(), category.get());
 
 			itemServices.updateItemById(itemId,
-					item.getName(),
 					item.getPrice(),
+					item.getName(),
 					item.getStock(),
-					item.isActive());
+					item.isActive(),
+					item.getDiscountPer(),
+					item.getCostPrice(), item.getSupplier());
 
 			return ResponseEntity.status(HttpStatus.OK).body(
 					new CustomResponse<Item>(updatedItem, "Item updated successfully.", null));

@@ -17,16 +17,21 @@ const ItemList = ({ renderedItems, updateQuantity, filter }: ItemListProps) => {
 
   return (
     <>
-      {afterFilterItems?.map((item: Item) => (
-        <ItemCard
-          name={item.name}
-          price={item.price}
-          stock={item.stock}
-          itemId={item.itemId}
-          key={item.itemId}
-          updateQuantity={updateQuantity}
-        />
-      ))}
+      {afterFilterItems?.map((item: Item) => {
+        return (
+          item.active && (
+            <ItemCard
+              name={item.name}
+              price={item.price}
+              stock={item.stock}
+              itemId={item.itemId}
+              discountPer={item.discountPer}
+              key={item.itemId}
+              updateQuantity={updateQuantity}
+            />
+          )
+        );
+      })}
     </>
   );
 };

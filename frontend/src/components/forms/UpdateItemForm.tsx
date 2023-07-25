@@ -2,10 +2,10 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 
 import { getAllCategories } from "../../api/category-api";
-import { addItem } from "../../api/item-api";
-import type { AddItemArgs, Item } from "../../types/item";
+import { updateItem } from "../../api/item-api";
+import type { Item, ItemRequest } from "../../types/item";
 import useGetData from "../../utils/hooks/useGetData";
-import usePostData from "../../utils/hooks/usePostData";
+import usePatchData from "../../utils/hooks/usePatchData";
 import Button from "../buttons/Button";
 import ValidFormInput from "../inputs/ValidFormInput";
 import ValidFormSelect from "../inputs/ValidFormSelect";
@@ -14,7 +14,7 @@ const itemValidationSchema = Yup.object({
   name: Yup.string()
     .required("Item must have a name.")
     .matches(
-      /^[a-zA-Z0-9 ]+$/,
+      /^[a-zA-Z0-9 .-]+$/,
       "Item name can only contain letters and numbers."
     ),
   price: Yup.number()
@@ -38,43 +38,47 @@ const itemValidationSchema = Yup.object({
     .matches(/^[a-zA-Z ]+$/, "Item name can only contain letters and numbers."),
 });
 
-const initialValues = {
-  name: "",
-  price: 0,
-  stock: 0,
-  active: false,
-  discountPer: 0,
-  costPrice: 0,
-  supplier: "",
-  categoryId: "",
+type UpdateItemFormProps = {
+  item: Item;
 };
 
-const AddItemForm = () => {
+const UpdateItemForm = ({ item }: UpdateItemFormProps) => {
   const { data: categories } = useGetData(getAllCategories);
-  const { postData } = usePostData<Item, AddItemArgs>(addItem);
+  const { patchData } = usePatchData<ItemRequest, Item>(updateItem);
+
   const categoryOptions = categories?.map((category) => {
     return { value: category.id!, text: category.name };
   });
 
   return (
-    <div className="flex flex-col items-center justify-center font-exo dark:bg-slate-900 rounded-lg py-2">
+    <div className="flex flex-col items-center justify-center font-exo dark:bg-slate-900 rounded-lg py-2 m-auto">
       <Formik
-        initialValues={initialValues}
+        initialValues={{
+          name: item.name,
+          price: item.price,
+          stock: item.stock,
+          active: item.active,
+          discountPer: item.discountPer,
+          costPrice: item.costPrice,
+          supplier: item.supplier,
+          categoryId: "1",
+        }}
         onSubmit={async (value, _actions) => {
-          await postData({
-            item: {
-              name: value.name,
-              price: value.price,
-              stock: value.price,
-              active: value.active,
-              discountPer: value.discountPer,
-              costPrice: value.costPrice,
-              supplier: value.supplier,
+          await patchData(item.itemId!, {
+            active: value.active,
+            category: {
+              id: Number.parseInt(value.categoryId),
             },
-            categoryId: Number.parseInt(value.categoryId),
+            costPrice: value.costPrice,
+            discountPer: value.discountPer,
+            name: value.name,
+            price: value.price,
+            stock: value.stock,
+            supplier: value.supplier,
           });
         }}
         validationSchema={itemValidationSchema}
+        enableReinitialize={true}
       >
         {({ isValid, isSubmitting }) => (
           <Form className="text-slate-900 dark:text-slate-200">
@@ -110,7 +114,7 @@ const AddItemForm = () => {
               options={categoryOptions ? categoryOptions : []}
             />
             <Button
-              text="Submit"
+              text="Update"
               type="submit"
               disabled={!isValid || isSubmitting}
             />
@@ -121,4 +125,4 @@ const AddItemForm = () => {
   );
 };
 
-export default AddItemForm;
+export default UpdateItemForm;

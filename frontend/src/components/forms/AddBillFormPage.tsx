@@ -9,7 +9,7 @@ import ItemList from "../../components/cards/ItemList";
 import type { Item } from "../../types/item";
 
 export type Quantity = {
-  [key: string]: { qty: number; amt: number };
+  [key: string]: { qty: number; amt: number; discountAmt: number };
 };
 
 const AddBillForm = () => {
@@ -17,6 +17,7 @@ const AddBillForm = () => {
   const [itemAndQty, setItemAndQty] = useState<Quantity>({} as Quantity);
   const [filter, setFilter] = useState<string>("");
 
+  // Optimized calculation of the subtotal before adding in the discount factor
   const calculatedSubTotal = useMemo(() => {
     let subtotal = 0;
     Object.keys(itemAndQty).map((itemName) => {
@@ -24,6 +25,21 @@ const AddBillForm = () => {
       subtotal += amt;
     });
     return subtotal;
+  }, [itemAndQty]);
+
+  // Optimized calculation of the total after the discount
+  const calculatedTotal = useMemo(() => {
+    let total = 0;
+    Object.keys(itemAndQty).map((itemName) => {
+      const { discountAmt } = itemAndQty[itemName];
+      total += discountAmt;
+    });
+    return total;
+  }, [itemAndQty]);
+
+  // Calculates the overall discount percentage
+  const calculatedDiscountPercent = useMemo(() => {
+    return 100 * (1 - calculatedTotal / calculatedSubTotal);
   }, [itemAndQty]);
 
   return (
@@ -68,8 +84,8 @@ const AddBillForm = () => {
         </div>
         <CalculateCard
           subtotal={calculatedSubTotal}
-          tax={0}
-          total={calculatedSubTotal}
+          discount={calculatedDiscountPercent}
+          total={calculatedTotal}
         />
       </div>
     </div>

@@ -34,19 +34,18 @@ const SideBar = () => {
           text="Billing"
           linkTo="billing"
         />
-        {token && (
-          <SideBarLinks icon={CgProfile} text="Profile" linkTo="profile" />
-        )}
+        <SideBarLinks icon={CgProfile} text="Profile" linkTo="profile" />
       </div>
       <div className="absolute bottom-0">
-        {!token && <SideBarLinks icon={TbLogin} text="Login" linkTo="/login" />}
-        {token && (
+        {token ? (
           <SideBarLinks
             icon={TbLogout}
             text="Logout"
             linkTo="/logout"
             onClick={() => dispatch(logout())}
           />
+        ) : (
+          <SideBarLinks icon={TbLogin} text="Login" linkTo="/login" />
         )}
       </div>
     </div>

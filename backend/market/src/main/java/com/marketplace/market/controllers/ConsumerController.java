@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.marketplace.market.models.Category;
 import com.marketplace.market.models.Consumer;
 import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.services.ConsumerServices;

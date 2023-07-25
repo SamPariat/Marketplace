@@ -1,12 +1,11 @@
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 
-import { addConsumer} from "../../api/consumer-api";
+import { addConsumer } from "../../api/consumer-api";
+import { Consumer } from "../../types/consumer";
 import usePostData from "../../utils/hooks/usePostData";
 import Button from "../buttons/Button";
 import ValidFormInput from "../inputs/ValidFormInput";
-import { Consumer } from "../../types/consumer";
-
 
 const ConsumerValidationSchema = Yup.object({
   id: Yup.number()
@@ -18,13 +17,14 @@ const ConsumerValidationSchema = Yup.object({
     .matches(/^[a-zA-Z0-9]+$/, "Item ID can only contain letters and numbers."),
   phoneNo: Yup.string()
     .required("Consumer must have phone number.")
-    .matches(/^[0-9]{10}$/, "Enter a valid 10-digit phone number."),});
+    .matches(/^[0-9]{10}$/, "Enter a valid 10-digit phone number."),
+});
 
 const initialValues: Consumer = {
   id: 0,
-  phoneNo:"",
+  phoneNo: "",
   name: "",
-  address:"",
+  address: "",
 };
 
 const AddConsumerForm = () => {
@@ -43,8 +43,16 @@ const AddConsumerForm = () => {
           <Form className="text-slate-900 dark:text-slate-200">
             <ValidFormInput label="Consumer ID" name="id" type="text" />
             <ValidFormInput label="Consumer Name" name="name" type="text" />
-            <ValidFormInput label="Consumer Address" name="address" type="text" />
-            <ValidFormInput label="Consumer Phone No" name="phoneNo" type="number" />
+            <ValidFormInput
+              label="Consumer Address"
+              name="address"
+              type="text"
+            />
+            <ValidFormInput
+              label="Consumer Phone No"
+              name="phoneNo"
+              type="number"
+            />
             <Button
               text="Submit"
               type="submit"

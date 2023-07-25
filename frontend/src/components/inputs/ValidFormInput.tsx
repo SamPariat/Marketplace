@@ -9,10 +9,10 @@ type ValidFormInputProps = {
 } & FieldAttributes<any>;
 
 /**
- * 
+ *
  * @param name The attribute name applied in the label
  * @param label The label to display
- * @param type The input type
+ * @param value The initial value to display
  * @returns A reusable Formik input field
  */
 const ValidFormInput = ({ name, label, type }: ValidFormInputProps) => {

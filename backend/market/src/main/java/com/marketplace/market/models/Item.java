@@ -28,7 +28,9 @@ public class Item {
 
 	private int discountPer;
 
-	private int discountPrice;
+	private int costPrice;
+
+	private String supplier;
 
 	@ManyToOne
 	@JoinColumn(name = "id", nullable = false)
@@ -41,7 +43,8 @@ public class Item {
 	public Item() {
 	}
 
-	public Item(int itemId, String name, double price, int stock, boolean active, int discountPer, int discountPrice,
+	public Item(int itemId, String name, double price, int stock, boolean active, int discountPer, int costPrice,
+			String supplier,
 			Category category) {
 		this.itemId = itemId;
 		this.name = name;
@@ -49,7 +52,8 @@ public class Item {
 		this.stock = stock;
 		this.active = active;
 		this.discountPer = discountPer;
-		this.discountPrice = discountPrice;
+		this.costPrice = costPrice;
+		this.supplier = supplier;
 		this.category = category;
 	}
 
@@ -101,12 +105,12 @@ public class Item {
 		this.discountPer = discountPer;
 	}
 
-	public int getDiscountPrice() {
-		return discountPrice;
+	public int getCostPrice() {
+		return costPrice;
 	}
 
-	public void setDiscountPrice(int discountPrice) {
-		this.discountPrice = discountPrice;
+	public void setCostPrice(int costPrice) {
+		this.costPrice = costPrice;
 	}
 
 	public Category getCategory() {
@@ -117,11 +121,19 @@ public class Item {
 		this.category = category;
 	}
 
+	public String getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
+	}
+
 	@Override
 	public String toString() {
 		return "Item [itemId=" + itemId + ", name=" + name + ", price=" + price + ", stock=" + stock + ", active="
-				+ active + ", discountPer=" + discountPer + ", discountPrice=" + discountPrice + ", category" + category
-				+ "]";
+				+ active + ", discountPer=" + discountPer + ", costPrice=" + costPrice + ", category" + category
+				+ ", supplier=" + supplier + "]";
 	}
 
 }

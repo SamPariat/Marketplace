@@ -7,8 +7,9 @@ export type Item = {
   stock: number;
   active: boolean;
   discountPer: number;
-  discountPrice: number;
-  category: Category;
+  costPrice: number;
+  supplier: string;
+  category?: Category;
 };
 
 export type ItemRequest = {
@@ -18,8 +19,14 @@ export type ItemRequest = {
   stock: number;
   active: boolean;
   discountPer: number;
-  discountPrice: number;
+  costPrice: number;
+  supplier: string;
   category: {
     id: number;
   };
+};
+
+export type AddItemArgs = {
+  item: Item;
+  categoryId: number;
 };

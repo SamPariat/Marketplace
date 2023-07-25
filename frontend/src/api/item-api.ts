@@ -3,7 +3,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { axiosInstance } from "./axios-config";
 
 import type { CustomResponse } from "../types/custom-response";
-import type { Item, ItemRequest, ItemResponse } from "../types/item";
+import type { AddItemArgs, Item, ItemRequest } from "../types/item";
 import { generateError } from "../utils";
 
 export const getItems = async (): Promise<CustomResponse<Array<Item>>> => {
@@ -21,7 +21,7 @@ export const getItems = async (): Promise<CustomResponse<Array<Item>>> => {
 
 export const getItemById = async (
   itemId: number
-): Promise<CustomResponse<ItemResponse>> => {
+): Promise<CustomResponse<Omit<Item, "category">>> => {
   try {
     const response: AxiosResponse = await axiosInstance.get(`/item/${itemId}`);
 
@@ -51,17 +51,18 @@ export const getItemsByName = async (
   }
 };
 
-export const addItem = async (
-  item: Item,
-  categoryId: number
-): Promise<CustomResponse<Item>> => {
+export const addItem = async ({
+  item,
+  categoryId,
+}: AddItemArgs): Promise<CustomResponse<Item>> => {
   const body: ItemRequest = {
     name: item.name,
     price: item.price,
     stock: item.stock,
     active: item.active,
     discountPer: item.discountPer,
-    discountPrice: item.discountPrice,
+    costPrice: item.costPrice,
+    supplier: item.supplier,
     category: {
       id: categoryId,
     },
@@ -100,11 +101,13 @@ export const deleteItem = async (
 };
 
 export const updateItem = async (
-  itemId: number
+  itemId: number,
+  item: ItemRequest
 ): Promise<CustomResponse<Item>> => {
   try {
     const response: AxiosResponse = await axiosInstance.patch(
-      `/item/update?id=${itemId}`
+      `/item/update?id=${itemId}`,
+      item
     );
 
     return response.data;

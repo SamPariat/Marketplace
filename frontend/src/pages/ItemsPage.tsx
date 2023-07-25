@@ -38,6 +38,9 @@ const ItemsPage = () => {
                 Cost Price
               </th>
               <th className="px-6 py-2 border border-slate-500 bg-blue-400 dark:bg-slate-700">
+                Supplier
+              </th>
+              <th className="px-6 py-2 border border-slate-500 bg-blue-400 dark:bg-slate-700">
                 Active
               </th>
             </tr>
@@ -65,7 +68,10 @@ const ItemsPage = () => {
                   {item.discountPer}%
                 </td>
                 <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
-                  {item.discountPrice}
+                  {item.costPrice}
+                </td>
+                <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
+                  {item.supplier}
                 </td>
                 <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
                   {item.active ? "True" : "False"}

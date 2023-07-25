@@ -6,7 +6,7 @@ type ValidFormSelectProps = {
   name: string;
   options: Array<{
     value: string | number;
-    text: string;
+    text: string | number;
   }>;
   label: string;
   multiple?: boolean;

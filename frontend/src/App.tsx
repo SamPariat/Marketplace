@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 import AddBillFormPage, {
   loader as addBillLoader,
 } from "./components/forms/AddBillFormPage";
+import AddConsumerForm from "./components/forms/AddConsumerForm";
 import BillDetailsPage from "./pages/BillDetailsPage";
 import BillingPage from "./pages/BillingPage";
 import CategoriesPage from "./pages/CategoriesPage";
@@ -19,9 +20,18 @@ import ItemsPage from "./pages/ItemsPage";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import Profile from "./pages/Profile";
-import AddConsumerForm from "./components/forms/AddConsumerForm";
+import Protect from "./pages/Protect";
+import type { RootState } from "./redux";
+import { ADMIN, BILLER, INVENTORY_MANAGER } from "./utils/constants";
+import { useAppSelector } from "./utils/hooks/useAppSelector";
 
 const App = () => {
+  const user = useAppSelector((state: RootState) => state.user);
+  const isAdmin: boolean = user.token !== undefined && user.role === ADMIN;
+  const isInventoryManager: boolean =
+    user.token !== undefined && user.role === INVENTORY_MANAGER;
+  const isBiller: boolean = user.token !== undefined && user.role === BILLER;
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -42,7 +52,7 @@ const App = () => {
             },
             {
               path: "consumer",
-              element:<AddConsumerForm/>
+              element: <AddConsumerForm />,
             },
           ],
         },
@@ -50,7 +60,10 @@ const App = () => {
           path: "items",
           children: [
             { index: true, element: <ItemsPage /> },
-            { path: ":itemId", element: <ItemDetailsPage /> },
+            {
+              path: ":itemId",
+              element: <ItemDetailsPage />,
+            },
           ],
         },
         {
@@ -60,7 +73,16 @@ const App = () => {
             { path: ":categoryId", element: <CategoryDetailsPage /> },
           ],
         },
-        { path: "profile", element: <Profile /> },
+        {
+          path: "profile",
+          element: (
+            <Protect
+              element={<Profile />}
+              isAuth={isAdmin || isBiller || isInventoryManager}
+            />
+          ),
+        },
+        { path: "bill-form", element: <AddConsumerForm /> },
       ],
     },
     {

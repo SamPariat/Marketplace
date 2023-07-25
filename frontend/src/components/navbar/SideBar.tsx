@@ -10,9 +10,14 @@ import { useAppSelector } from "../../utils/hooks/useAppSelector";
 import SideBarLinks from "./SideBarLinks";
 
 import { logout } from "../../redux/slices/userSlice";
+import { ADMIN, BILLER, INVENTORY_MANAGER } from "../../utils/constants";
 
 const SideBar = () => {
-  const token = useAppSelector((state: RootState) => state.user.token);
+  const user = useAppSelector((state: RootState) => state.user);
+  const isAdmin: boolean = user.token !== undefined && user.role === ADMIN;
+  const isInventoryManager: boolean =
+    user.token !== undefined && user.role === INVENTORY_MANAGER;
+  const isBiller: boolean = user.token !== undefined && user.role === BILLER;
   const dispatch = useAppDispatch();
 
   return (
@@ -28,7 +33,9 @@ const SideBar = () => {
       <div className="mt-10">
         <SideBarLinks icon={TbHomeDot} text="Home" linkTo="" />
         <SideBarLinks icon={BiCategory} text="Categories" linkTo="categories" />
-        <SideBarLinks icon={FiShoppingCart} text="Items" linkTo="items" />
+        {user.token && (isAdmin || isInventoryManager) && (
+          <SideBarLinks icon={FiShoppingCart} text="Items" linkTo="items" />
+        )}
         <SideBarLinks
           icon={FaIndianRupeeSign}
           text="Billing"
@@ -37,7 +44,7 @@ const SideBar = () => {
         <SideBarLinks icon={CgProfile} text="Profile" linkTo="profile" />
       </div>
       <div className="absolute bottom-0">
-        {token ? (
+        {user.token ? (
           <SideBarLinks
             icon={TbLogout}
             text="Logout"

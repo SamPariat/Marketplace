@@ -7,11 +7,12 @@ import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.min.css";
 
+import AddConsumerForm from "./components/forms/AddConsumerForm";
 import AddBillFormPage, {
   loader as addBillLoader,
-} from "./components/forms/AddBillFormPage";
-import AddConsumerForm from "./components/forms/AddConsumerForm";
+} from "./pages/AddBillFormPage";
 import BillDetailsPage from "./pages/BillDetailsPage";
+import BillGenerate from "./pages/BillGeneratePage";
 import BillingPage from "./pages/BillingPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import CategoryDetailsPage from "./pages/CategoryDetailsPage";
@@ -40,15 +41,47 @@ const App = () => {
         {
           path: "billing",
           children: [
-            { index: true, element: <BillingPage /> },
+            {
+              index: true,
+              element: (
+                <Protect
+                  element={<BillingPage />}
+                  isAuth={isAdmin || isBiller}
+                />
+              ),
+            },
             {
               path: ":billId",
-              element: <BillDetailsPage />,
+              element: (
+                <Protect
+                  element={<BillDetailsPage />}
+                  isAuth={isAdmin || isBiller}
+                />
+              ),
             },
             {
               path: "new-bill",
-              element: <AddBillFormPage />,
-              loader: addBillLoader,
+              children: [
+                {
+                  index: true,
+                  element: (
+                    <Protect
+                      element={<AddBillFormPage />}
+                      isAuth={isAdmin || isBiller}
+                    />
+                  ),
+                  loader: addBillLoader,
+                },
+                {
+                  path: "generate-bill",
+                  element: (
+                    <Protect
+                      element={<BillGenerate />}
+                      isAuth={isAdmin || isBiller}
+                    />
+                  ),
+                },
+              ],
             },
             {
               path: "consumer",

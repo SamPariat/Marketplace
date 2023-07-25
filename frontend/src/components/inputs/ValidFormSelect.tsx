@@ -30,7 +30,7 @@ const ValidFormSelect = ({
       <span className="flex items-center">
         <label
           htmlFor={name}
-          className="w-full font-semibold px-6 py-2 inline-block bg-blue-400 dark:bg-slate-700"
+          className="w-full font-semibold px-6 py-2 inline-block bg-blue-300 dark:bg-slate-700"
         >
           {label}
         </label>

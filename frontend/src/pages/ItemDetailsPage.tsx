@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { AiOutlineEdit } from "react-icons/ai";
+import { MdOutlineCancel } from "react-icons/md";
 import { useParams } from "react-router-dom";
-import { CiEdit } from "react-icons/ci";
 
 import { getItemById } from "../api/item-api";
+import UpdateItemForm from "../components/forms/UpdateItemForm";
 import type { Item } from "../types/item";
 import useGetData from "../utils/hooks/useGetData";
-import UpdateItemForm from "../components/forms/UpdateItemForm";
 
 const ItemDetailsPage = () => {
   const { itemId } = useParams();
@@ -18,8 +19,18 @@ const ItemDetailsPage = () => {
   return (
     <div className="flex flex-grow justify-center items-center font-exo">
       <div className="bg-slate-200 dark:bg-slate-900 rounded-lg text-slate-900 dark:text-slate-200 w-1/2 px-5 py-5">
-        <span className="flex flex-row justify-end">
-          <CiEdit onClick={() => setUpdating(!updating)} />
+        <span className="flex flex-row justify-end gap-4">
+          {!updating ? (
+            <AiOutlineEdit
+              onClick={() => setUpdating(true)}
+              className="text-2xl cursor-pointer"
+            />
+          ) : (
+            <MdOutlineCancel
+              onClick={() => setUpdating(false)}
+              className="text-2xl cursor-pointer"
+            />
+          )}
         </span>
         <h1 className="font-semibold text-3xl text-center mb-4 select-none">
           Details for item id - {item?.itemId}
@@ -68,6 +79,12 @@ const ItemDetailsPage = () => {
               <p>Cost Price</p>
               <p className="bg-slate-300 dark:bg-slate-600 rounded-md w-fit py-1 px-10">
                 {item?.costPrice}
+              </p>
+            </span>
+            <span className="flex flex-row items-center justify-between my-2">
+              <p>Supplier</p>
+              <p className="bg-slate-300 dark:bg-slate-600 rounded-md w-fit py-1 px-10">
+                {item?.supplier}
               </p>
             </span>
           </>

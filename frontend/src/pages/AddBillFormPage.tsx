@@ -2,11 +2,11 @@ import { AnimatePresence } from "framer-motion";
 import { Suspense, useMemo, useState } from "react";
 import { Await, defer, useLoaderData } from "react-router-dom";
 
-import { getItems } from "../../api/item-api";
-import BillItem from "../../components/cards/BillItem";
-import CalculateCard from "../../components/cards/CalculateCard";
-import ItemList from "../../components/cards/ItemList";
-import type { Item } from "../../types/item";
+import { getItems } from "../api/item-api";
+import BillItem from "../components/cards/BillItem";
+import CalculateCard from "../components/cards/CalculateCard";
+import ItemList from "../components/cards/ItemList";
+import type { Item } from "../types/item";
 
 export type Quantity = {
   [key: string]: { qty: number; amt: number; discountAmt: number };
@@ -86,6 +86,7 @@ const AddBillForm = () => {
           subtotal={calculatedSubTotal}
           discount={calculatedDiscountPercent}
           total={calculatedTotal}
+          itemAndQty={itemAndQty}
         />
       </div>
     </div>

@@ -37,6 +37,7 @@ const Profile = () => {
                   name="username"
                   type="text"
                   placeholder={user.name}
+                  readOnly
                 />
               </div>
               <div className="mb-6">
@@ -51,6 +52,7 @@ const Profile = () => {
                   name="text"
                   type="text"
                   placeholder={user.email}
+                  readOnly
                 />
                 <label
                   className="block text-gray-700 dark:text-gray-200 text-xl font-bold mb-2"
@@ -63,6 +65,7 @@ const Profile = () => {
                   name="role"
                   type="text"
                   placeholder={user.role}
+                  readOnly
                 />
               </div>
               <button className="bg-slate-700 dark:bg-slate-500 hover:bg-slate-900 dark:hover:bg-slate-700 text-white font-bold py-2 px-7 border border-slate-500 rounded ">

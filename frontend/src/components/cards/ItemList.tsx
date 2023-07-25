@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { Quantity } from "../../components/forms/AddBillFormPage";
+import type { Quantity } from "../../pages/AddBillFormPage";
 import type { Item } from "../../types/item";
 import ItemCard from "./ItemCard";
 

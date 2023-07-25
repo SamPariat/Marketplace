@@ -38,6 +38,18 @@ const ItemCard = ({ name, price, stock, updateQuantity }: ItemCardProps) => {
       }
     }
   };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newQuantity = Number(event.target.value);
+    if (!isNaN(newQuantity) && newQuantity >= 0 && newQuantity <= stock) {
+      setQuantity(newQuantity);
+    } else if (isNaN(newQuantity)) {
+      setQuantity(0);
+    } else if (newQuantity < 0) {
+      toast.info(`Item quantity of '${name}' cannot be negative`);
+    } else {
+      toast.info(`Item quantity of '${name}' cannot exceed available stock`);
+    }
+  };
 
   useEffect(() => {
     handleUpdateQuantity();
@@ -55,7 +67,12 @@ const ItemCard = ({ name, price, stock, updateQuantity }: ItemCardProps) => {
           className="text-xl hover:cursor-pointer"
           onClick={() => handleClick("minus")}
         />
-        <p className="text-lg font-semibold">{quantity}</p>
+        <input
+          type="text"
+          className="text-lg font-semibold w-10 text-center appearance-none bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-200 rounded-md "
+          value={quantity}
+          onChange={handleChange}
+        />
         <AiOutlinePlus
           className="text-xl hover:cursor-pointer"
           onClick={() => handleClick("plus")}

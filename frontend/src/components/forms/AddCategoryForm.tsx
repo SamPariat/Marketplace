@@ -11,12 +11,25 @@ import ValidFormSelect from "../inputs/ValidFormSelect";
 const categoryValidationSchema = Yup.object({
   name: Yup.string()
     .required("Category must have a name.")
-    .matches(/^[a-zA-Z0-9 ]+$/, "Item ID can only contain letters and numbers."),
+    .matches(
+      /^[a-zA-Z0-9 ]+$/,
+      "Item ID can only contain letters and numbers."
+    ),
+  tax: Yup.number()
+    .required("Category must have a name.")
+    .min(0, "Percentage cannot not be negative.")
+    .max(100, "Percentage cannot be more than 100."),
+  serviceTax: Yup.number()
+    .required("Category must have a name.")
+    .min(0, "Percentage cannot not be negative.")
+    .max(100, "Percentage cannot be more than 100."),
   isTaxApplicable: Yup.boolean().default(false),
 });
 
 const initialValues: Category = {
+  tax: 0,
   name: "",
+  serviceTax: 0,
   isTaxApplicable: false,
 };
 
@@ -29,12 +42,19 @@ const AddCategoryForm = () => {
         initialValues={initialValues}
         onSubmit={async (value, _actions) => {
           await postData(value);
+          
         }}
         validationSchema={categoryValidationSchema}
       >
         {({ isValid, isSubmitting }) => (
           <Form className="text-slate-900 dark:text-slate-200">
             <ValidFormInput label="Category Name" name="name" type="text" />
+            <ValidFormInput label="Tax" name="tax" type="number" />
+            <ValidFormInput
+              label="Service Tax"
+              name="serviceTax"
+              type="number"
+            />
             <ValidFormSelect
               label="Is Tax Applicable"
               name="isTaxApplicable"

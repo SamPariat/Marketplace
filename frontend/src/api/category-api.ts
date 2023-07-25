@@ -41,6 +41,8 @@ export const addCategory = async (
   const body = {
     id: category.id,
     name: category.name,
+    tax: category.tax,
+    serviceTax: category.serviceTax,
     isTaxApplicable: category.isTaxApplicable,
   };
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -77,12 +78,18 @@ public class CategoryController {
             categoryServices.save(category);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new CustomResponse<Category>(category, "Successfully added the category.", null));
+        } catch (DataIntegrityViolationException e) {
+            // Handle duplicate entry error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new CustomResponse<Category>(null, "Error",
+                            "The category with the same name already exists."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new CustomResponse<Category>(null, "Some error occurred while adding the category.",
                             e.getMessage()));
         }
     }
+
 
     @DeleteMapping(path = "/delete")
     public ResponseEntity<CustomResponse<Category>> deleteCategory(@RequestParam("id") int categoryId) {

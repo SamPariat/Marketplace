@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,12 +17,12 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	private int id;
-
+	@Column(unique=true)
 	private String name;
 
-	private int tax;
+	private double tax;
 
-	private int serviceTax;
+	private double serviceTax;
 
 	private boolean isTaxApplicable;
 
@@ -68,19 +69,19 @@ public class Category {
 	public Category() {
 	}
 
-	public int getTax() {
+	public double getTax() {
 		return tax;
 	}
 
-	public void setTax(int tax) {
+	public void setTax(double tax) {
 		this.tax = tax;
 	}
 
-	public int getServiceTax() {
+	public double getServiceTax() {
 		return serviceTax;
 	}
 
-	public void setServiceTax(int serviceTax) {
+	public void setServiceTax(double serviceTax) {
 		this.serviceTax = serviceTax;
 	}
 
@@ -90,7 +91,7 @@ public class Category {
 				+ ", isTaxApplicable=" + isTaxApplicable + "]";
 	}
 
-	public Category(int id, String name, int tax, int serviceTax, boolean isTaxApplicable, Set<Item> items) {
+	public Category(int id, String name, double tax, double serviceTax, boolean isTaxApplicable, Set<Item> items) {
 		this.id = id;
 		this.name = name;
 		this.tax = tax;

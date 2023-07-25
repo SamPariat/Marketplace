@@ -26,6 +26,12 @@ const CategoriesPage = () => {
                 Category Name
               </th>
               <th className="px-6 py-2 border border-slate-500 bg-blue-400 dark:bg-slate-700">
+                Tax
+              </th>
+              <th className="px-6 py-2 border border-slate-500 bg-blue-400 dark:bg-slate-700">
+                Service Tax
+              </th>
+              <th className="px-6 py-2 border border-slate-500 bg-blue-400 dark:bg-slate-700">
                 Is Tax Applicable
               </th>
             </tr>
@@ -42,6 +48,12 @@ const CategoriesPage = () => {
                 </td>
                 <td className="px-6 py-2 text-left border border-slate-500 bg-blue-100 dark:bg-slate-600">
                   {category.name}
+                </td>
+                <td className="px-6 py-2 text-left border border-slate-500 bg-blue-100 dark:bg-slate-600">
+                  {category.tax}
+                </td>
+                <td className="px-6 py-2 text-left border border-slate-500 bg-blue-100 dark:bg-slate-600">
+                  {category.serviceTax}
                 </td>
                 <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
                   {category.isTaxApplicable ? "True" : "False"}

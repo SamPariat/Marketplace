@@ -52,22 +52,22 @@ const BillingPage = () => {
                 {bill.billId}
               </td>
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
-                {bill.serviceTax}
+                {bill.serviceTax.toFixed(2)}
               </td>
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
-                {bill.cgst}
+                {bill.cgst.toFixed(2)}
               </td>
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
-                {bill.sgst}
+                {bill.sgst.toFixed(2)}
               </td>
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
-                {bill.discountPercentage}%
+                {bill.discountPercentage.toFixed(2)}%
               </td>
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
-                {bill.discountAmount}
+                {bill.discountAmount.toFixed(2)}
               </td>
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
-                {bill.totalAmount}
+                {bill.totalAmount.toFixed(2)}
               </td>
               <td className="px-6 py-2 text-center border border-slate-500 bg-blue-100 dark:bg-slate-600">
                 {bill.billerId}

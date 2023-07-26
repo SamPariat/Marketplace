@@ -1,14 +1,52 @@
 import { useLocation } from "react-router-dom";
 
+import { addBill } from "../api/billing-api";
 import Button from "../components/buttons/Button";
+import type { Bill, BillRequest } from "../types/bill";
+import usePostData from "../utils/hooks/usePostData";
+import type { Quantity } from "./AddBillFormPage";
+
+type LocationStateType = {
+  itemAndQty: Quantity;
+  subtotal: number;
+  total: number;
+  discount: number;
+};
 
 const BillGeneratePage = () => {
   const location = useLocation();
+  const { postData } = usePostData<Bill, BillRequest>(addBill);
+  
   // Passed from AddBillFormPage -> CalculateCard as props -> BillGeneratePage as state of navigation
-  const { subtotal, total, discount } = location.state;
+  const { itemAndQty, subtotal, total, discount } =
+    location.state as LocationStateType;
 
-  const priceAfterGST = 1.18 * subtotal;
+  const gst = 0.18 * total;
+  const priceAfterGST = gst + total;
   const discountRupees = subtotal - total;
+
+  const submitBillHandler = async () => {
+    // Filter out the items that were submitted from the previous page
+    const boughtItems = Object.values(itemAndQty).filter(
+      (item) => item.qty > 0
+    );
+
+    // Get the id's of the items bought by the user
+    const items = boughtItems.reduce((prevValue, currValue) => {
+      return [...prevValue, { itemId: currValue.itemId }];
+    }, [] as Array<{ itemId: number }>);
+
+    await postData({
+      serviceTax: 0,
+      billerId: 0,
+      cgst: gst / 2,
+      sgst: gst / 2,
+      items,
+      discountAmount: discountRupees,
+      discountPercentage: discount,
+      totalAmount: total,
+    });
+  };
 
   return (
     <div className="flex flex-col space-y-6 my-10 text-slate-900 dark:text-slate-200 w-2/5 m-auto font-raleway">
@@ -47,10 +85,12 @@ const BillGeneratePage = () => {
           </span>
         </div>
       </div>
-      <div className="flex flex-col bg-slate-200 dark:bg-slate-600 rounded-xl shadow-md px-6 py-3">
-        <h4 className="font-medium">Order Summary</h4>
-      </div>
-      <Button text="Save Bill" type="button" rounded />
+      <Button
+        text="Save Bill"
+        type="button"
+        rounded
+        clickHandler={submitBillHandler}
+      />
     </div>
   );
 };

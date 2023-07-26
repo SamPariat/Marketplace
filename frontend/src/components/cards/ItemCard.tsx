@@ -9,7 +9,7 @@ type ItemCardProps = {
   price: number;
   stock: number;
   discountPer: number;
-  itemId?: number;
+  itemId: number;
   updateQuantity: React.Dispatch<React.SetStateAction<Quantity>>; // A function to pass the state to the AddBillFormPage
 };
 
@@ -19,14 +19,17 @@ const ItemCard = ({
   stock,
   discountPer,
   updateQuantity,
+  itemId,
 }: ItemCardProps) => {
   const [quantity, setQuantity] = useState<number>(0);
 
+  // A function that runs on every change in useEffect
   const handleUpdateQuantity = () =>
     updateQuantity((prevQuantities) => {
       return {
         ...prevQuantities,
         [name]: {
+          itemId,
           qty: quantity,
           amt: quantity * price,
           discountAmt: (1 - 0.01 * discountPer) * quantity * price,
@@ -34,6 +37,7 @@ const ItemCard = ({
       };
     });
 
+  // Handles the quantity update if the user inputs the numeric value
   const handleUpdateQuantityInput = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -47,6 +51,8 @@ const ItemCard = ({
     }
   };
 
+  // Handles the quantity update if the user updates the numeric value via clicks
+  // on the minus & plus icons
   const handleClick = (sign: "minus" | "plus") => {
     if (sign === "minus") {
       if (quantity - 1 >= 0) {
@@ -64,6 +70,7 @@ const ItemCard = ({
   };
 
   useEffect(() => {
+    // Handle the quantity change when the input value changes or icons are clicked
     handleUpdateQuantity();
   }, [quantity]);
 

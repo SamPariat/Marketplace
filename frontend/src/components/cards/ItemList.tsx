@@ -11,6 +11,7 @@ type ItemListProps = {
 };
 
 const ItemList = ({ renderedItems, updateQuantity, filter }: ItemListProps) => {
+  // Search bar logic
   const afterFilterItems = renderedItems?.filter((item) =>
     item.name.toLowerCase().startsWith(filter.toLowerCase())
   );
@@ -24,7 +25,7 @@ const ItemList = ({ renderedItems, updateQuantity, filter }: ItemListProps) => {
               name={item.name}
               price={item.price}
               stock={item.stock}
-              itemId={item.itemId}
+              itemId={item.itemId!}
               discountPer={item.discountPer}
               key={item.itemId}
               updateQuantity={updateQuantity}

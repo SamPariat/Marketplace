@@ -32,37 +32,37 @@ const BillDetailsPage = () => {
         <span className="flex flex-row items-center justify-between my-2">
           <p>Service Tax</p>
           <p className="bg-slate-300 dark:bg-slate-600 rounded-md w-fit py-1 px-10">
-            {bill?.serviceTax}
+            {bill?.serviceTax.toFixed(2)}
           </p>
         </span>
         <span className="flex flex-row items-center justify-between my-2">
           <p>CGST</p>
           <p className="bg-slate-300 dark:bg-slate-600 rounded-md w-fit py-1 px-10">
-            {bill?.cgst}
+            {bill?.cgst.toFixed(2)}
           </p>
         </span>
         <span className="flex flex-row items-center justify-between my-2">
           <p>SGST</p>
           <p className="bg-slate-300 dark:bg-slate-600 rounded-md w-fit py-1 px-10">
-            {bill?.sgst}
+            {bill?.sgst.toFixed(2)}
           </p>
         </span>
         <span className="flex flex-row items-center justify-between my-2">
           <p>Discount %</p>
           <p className="bg-slate-300 dark:bg-slate-600 rounded-md w-fit py-1 px-10">
-            {bill?.discountPercentage}
+            {bill?.discountPercentage.toFixed(2)}
           </p>
         </span>
         <span className="flex flex-row items-center justify-between my-2">
           <p>Discount Amount</p>
           <p className="bg-slate-300 dark:bg-slate-600 rounded-md w-fit py-1 px-10">
-            {bill?.discountAmount}
+            {bill?.discountAmount.toFixed(2)}
           </p>
         </span>
         <span className="flex flex-row items-center justify-between my-2">
           <p>Total Amount</p>
           <p className="bg-slate-300 dark:bg-slate-600 rounded-md w-fit py-1 px-10">
-            {bill?.totalAmount}
+            {bill?.totalAmount.toFixed(2)}
           </p>
         </span>
         <span className="flex flex-row items-center justify-between my-2">

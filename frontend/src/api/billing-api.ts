@@ -61,7 +61,9 @@ export const getAllBills = async (): Promise<CustomResponse<Array<Bill>>> => {
   }
 };
 
-export const addBill = async (bill: BillRequest) => {
+export const addBill = async (
+  bill: BillRequest
+): Promise<CustomResponse<Bill>> => {
   try {
     const response: AxiosResponse = await axiosInstance.post(
       "/billing/addBill",

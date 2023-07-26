@@ -9,10 +9,15 @@ import ItemList from "../components/cards/ItemList";
 import type { Item } from "../types/item";
 
 export type Quantity = {
-  [key: string]: { qty: number; amt: number; discountAmt: number };
+  [key: string]: {
+    itemId: number;
+    qty: number;
+    amt: number;
+    discountAmt: number;
+  };
 };
 
-const AddBillForm = () => {
+const AddBillFormPage = () => {
   const { items } = useLoaderData() as { items: Array<Item> | null };
   const [itemAndQty, setItemAndQty] = useState<Quantity>({} as Quantity);
   const [filter, setFilter] = useState<string>("");
@@ -99,4 +104,4 @@ export const loader = () => {
   });
 };
 
-export default AddBillForm;
+export default AddBillFormPage;

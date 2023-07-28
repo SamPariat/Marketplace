@@ -16,3 +16,8 @@ export type Bill = {
 export type BillRequest = {
   items: Array<{ itemId: number }>;
 } & Omit<Bill, "billId" | "timeStamp" | "items">;
+
+export type BillingRequest = {
+  billingTable: BillRequest;
+  itemQuantities: Map<string, number>;
+};

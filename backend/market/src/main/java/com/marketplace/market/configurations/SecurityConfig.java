@@ -24,7 +24,7 @@ public class SecurityConfig {
 
 	@Autowired
 	private JwtAuthenticationEntryPoint point;
-	
+
 	@Autowired
 	private JwtAuthenticationFilter filter;
 
@@ -33,8 +33,8 @@ public class SecurityConfig {
 
 		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
 				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/auth/login","/billing/**","/category/**","/item/**","/user/**","/consumer/**").permitAll()
-								.requestMatchers("/user/signup").permitAll().anyRequest().authenticated())
+						auth -> auth.requestMatchers("/auth/login", "/").permitAll()
+								.requestMatchers("/billing/**", "/category/**", "/item/**", "/user/**").authenticated())
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

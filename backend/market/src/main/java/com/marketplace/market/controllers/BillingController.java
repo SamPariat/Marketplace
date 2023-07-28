@@ -2,6 +2,7 @@ package com.marketplace.market.controllers;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.marketplace.market.models.BillingRequest;
 import com.marketplace.market.models.BillingTable;
 import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.models.Item;
+import com.marketplace.market.models.ItemSold;
 import com.marketplace.market.services.BillingTableServices;
 import com.marketplace.market.services.ItemServices;
+import com.marketplace.market.services.ItemSoldServices;
 
 @RestController
 @RequestMapping(value = "/billing")
@@ -33,6 +37,9 @@ public class BillingController {
 
 	@Autowired
 	private ItemServices itemServices;
+
+	@Autowired
+	private ItemSoldServices itemSoldServices;
 
 	@GetMapping("/time")
 	public LocalDateTime time() {
@@ -77,8 +84,11 @@ public class BillingController {
 	}
 
 	@PostMapping("/addBill")
-	public ResponseEntity<CustomResponse<BillingTable>> addItem(@RequestBody BillingTable bill) {
+	public ResponseEntity<CustomResponse<BillingTable>> addItem(@RequestBody BillingRequest billingRequest) {
 		try {
+			BillingTable bill = billingRequest.getBillingTable();
+			HashMap<String, Integer> itemQuantities = billingRequest.getItemQuantities();
+
 			Set<Integer> idsOfItems = new HashSet<>();
 
 			for (Item item : bill.getItems()) {
@@ -101,6 +111,21 @@ public class BillingController {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(new CustomResponse<BillingTable>(null, null,
 								"Cannot find the following items: " + notFoundIds));
+			}
+
+			for (Item item : items) {
+				Optional<ItemSold> itemToUpdate = itemSoldServices.findByNameAndId(item.getName(), item.getItemId());
+
+				if (itemSoldServices.findById(item.getItemId()) == null) {
+					ItemSold newItemSold = new ItemSold(item.getItemId(), item.getName(),
+							itemQuantities.get(item.getName()),
+							item.getSupplier(), LocalDateTime.now());
+					itemSoldServices.save(newItemSold);
+				} else {
+					int newQuantity = itemToUpdate.get().getQuantity() + itemQuantities.get(item.getName());
+					itemToUpdate.get().setQuantity(newQuantity);
+					itemSoldServices.updateItemSoldById(itemToUpdate.get().getId(), newQuantity);
+				}
 			}
 
 			bill.setTimeStamp(LocalDateTime.now());

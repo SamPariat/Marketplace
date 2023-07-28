@@ -3,8 +3,9 @@ import { toast } from "react-toastify";
 
 import { login } from "../../api/auth-api";
 import type { LoginRequest } from "../../types/login";
-import { handleError } from "../../utils";
+import { handleError, hasTokenExpired } from "../../utils";
 import { reduxState } from "../../utils/constants";
+import { axiosInstance } from "../../api/axios-config";
 
 export interface UserState {
   loading: boolean;
@@ -60,16 +61,23 @@ export const userSlice = createSlice({
       state.role = undefined;
       state.name = undefined;
       state.tokenIssuingTime = undefined;
+      axiosInstance.defaults.headers.common["Authorization"] = null;
 
       // Remove the token from local storage
       localStorage.removeItem(reduxState);
     },
     loadUserState: (state, action) => {
       if (action.payload) {
+        if (hasTokenExpired(action.payload.token)) {
+          return;
+        }
         state.email = action.payload.email;
         state.token = action.payload.token;
         state.role = action.payload.role;
         state.name = action.payload.name;
+        axiosInstance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${action.payload.token}`;
       }
     },
   },
@@ -84,6 +92,9 @@ export const userSlice = createSlice({
       state.role = action.payload?.role;
       state.name = action.payload?.name;
       state.tokenIssuingTime = new Date().toISOString();
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${action.payload?.jwtToken}`;
 
       // Store the token in local storage
       localStorage.setItem(

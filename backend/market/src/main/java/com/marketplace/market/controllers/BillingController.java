@@ -2,7 +2,6 @@ package com.marketplace.market.controllers;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +24,7 @@ import com.marketplace.market.models.BillingTable;
 import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.models.Item;
 import com.marketplace.market.models.ItemSold;
+import com.marketplace.market.models.NameIdQuantity;
 import com.marketplace.market.services.BillingTableServices;
 import com.marketplace.market.services.ItemServices;
 import com.marketplace.market.services.ItemSoldServices;
@@ -87,16 +87,16 @@ public class BillingController {
 	public ResponseEntity<CustomResponse<BillingTable>> addItem(@RequestBody BillingRequest billingRequest) {
 		try {
 			BillingTable bill = billingRequest.getBillingTable();
-			HashMap<String, Integer> itemQuantities = billingRequest.getItemQuantities();
+			List<NameIdQuantity> boughtItemsInfo = billingRequest.getItemQuantities();
 
-			Set<Integer> idsOfItems = new HashSet<>();
+			Set<Integer> idsOfItems = new HashSet<>(); // The list of item ids from the bill
 
 			for (Item item : bill.getItems()) {
 				idsOfItems.add(item.getItemId());
 			}
 
-			Set<Integer> notFoundIds = new TreeSet<>();
-			Set<Item> items = new HashSet<>();
+			Set<Integer> notFoundIds = new TreeSet<>(); // Returns a sorted list of items that don't exist
+			Set<Item> items = new HashSet<>(); // Returns a list of items that exist
 
 			for (int itemId : idsOfItems) {
 				Optional<Item> existingItem = itemServices.findById(itemId);
@@ -113,18 +113,20 @@ public class BillingController {
 								"Cannot find the following items: " + notFoundIds));
 			}
 
-			for (Item item : items) {
-				Optional<ItemSold> itemToUpdate = itemSoldServices.findByNameAndId(item.getName(), item.getItemId());
+			for (NameIdQuantity niq : boughtItemsInfo) {
+				String itemName = niq.getName();
+				int itemId = niq.getItemId();
+				int quantity = niq.getQuantity();
 
-				if (itemSoldServices.findById(item.getItemId()) == null) {
-					ItemSold newItemSold = new ItemSold(item.getItemId(), item.getName(),
-							itemQuantities.get(item.getName()),
-							item.getSupplier(), LocalDateTime.now());
-					itemSoldServices.save(newItemSold);
+				Optional<ItemSold> existingItem = itemSoldServices.findByNameAndId(itemName, itemId);
+
+				if (!existingItem.isPresent()) {
+					String itemSupplier = itemServices.findById(itemId).get().getSupplier();
+					itemSoldServices.save(new ItemSold(itemId, itemName, quantity, itemSupplier, LocalDateTime.now()));
 				} else {
-					int newQuantity = itemToUpdate.get().getQuantity() + itemQuantities.get(item.getName());
-					itemToUpdate.get().setQuantity(newQuantity);
-					itemSoldServices.updateItemSoldById(itemToUpdate.get().getId(), newQuantity);
+					int newQty = existingItem.get().getQuantity() + quantity;
+					existingItem.get().setQuantity(quantity);
+					itemSoldServices.updateItemSoldById(itemId, newQty);
 				}
 			}
 
@@ -138,6 +140,7 @@ public class BillingController {
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new CustomResponse<BillingTable>(bill, "Successfully added the bill.", null));
 		} catch (Exception e) {
+			System.out.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
 					new CustomResponse<BillingTable>(null, "Some error occurred while trying to save the bill.",
 							e.getMessage()));

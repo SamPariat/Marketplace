@@ -15,6 +15,7 @@ const LoginPage = ({}: LoginPageProps) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [signIn, setSignIn] = useState<boolean>(true);
+  const role = useAppSelector((state: RootState) => state.user.role);
   const navigate = useNavigate();
 
   const token = useAppSelector((state: RootState) => state.user.token);
@@ -83,33 +84,35 @@ const LoginPage = ({}: LoginPageProps) => {
         >
           {signIn ? "Sign In" : "Create Account"}
         </button>
-        <span className="flex flex-row text-xs">
-          {signIn ? (
-            <>
-              <p className="text-slate-900 dark:text-slate-200">
-                Don't have an account?
-              </p>
-              <p
-                onClick={toggleMode}
-                className="underline hover:cursor-pointer ml-2 text-slate-900 dark:text-slate-200"
-              >
-                Create account
-              </p>
-            </>
-          ) : (
-            <>
-              <p className="text-slate-900 dark:text-slate-200">
-                Already have an account?
-              </p>
-              <p
-                onClick={toggleMode}
-                className="underline hover:cursor-pointer ml-2 text-slate-900 dark:text-slate-200"
-              >
-                Sign in
-              </p>
-            </>
-          )}
-        </span>
+        {role === "ADMIN" && (
+          <span className="flex flex-row text-xs">
+            {signIn ? (
+              <>
+                <p className="text-slate-900 dark:text-slate-200">
+                  Don't have an account?
+                </p>
+                <p
+                  onClick={toggleMode}
+                  className="underline hover:cursor-pointer ml-2 text-slate-900 dark:text-slate-200"
+                >
+                  Create account
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-slate-900 dark:text-slate-200">
+                  Already have an account?
+                </p>
+                <p
+                  onClick={toggleMode}
+                  className="underline hover:cursor-pointer ml-2 text-slate-900 dark:text-slate-200"
+                >
+                  Sign in
+                </p>
+              </>
+            )}
+          </span>
+        )}
       </form>
     </div>
   );

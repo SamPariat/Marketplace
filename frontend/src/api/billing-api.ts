@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from "axios";
 
-import type { Bill, BillRequest } from "../types/bill";
+import type { Bill, BillRequest, BillingRequest } from "../types/bill";
 import type { CustomResponse } from "../types/custom-response";
 import { generateError } from "../utils";
 import { axiosInstance } from "./axios-config";
@@ -62,7 +62,7 @@ export const getAllBills = async (): Promise<CustomResponse<Array<Bill>>> => {
 };
 
 export const addBill = async (
-  bill: BillRequest
+  bill: BillingRequest
 ): Promise<CustomResponse<Bill>> => {
   try {
     const response: AxiosResponse = await axiosInstance.post(

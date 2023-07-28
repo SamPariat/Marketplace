@@ -1,10 +1,11 @@
 package com.marketplace.market.models;
 
-import java.util.HashMap;
+import java.util.List;
 
 public class BillingRequest {
     private BillingTable billingTable;
-    private HashMap<String, Integer> itemQuantities;
+
+    private List<NameIdQuantity> itemQuantities;
 
     public BillingTable getBillingTable() {
         return billingTable;
@@ -14,18 +15,18 @@ public class BillingRequest {
         this.billingTable = billingTable;
     }
 
-    public HashMap<String, Integer> getItemQuantities() {
+    public List<NameIdQuantity> getItemQuantities() {
         return itemQuantities;
     }
 
-    public void setItemQuantities(HashMap<String, Integer> itemQuantities) {
+    public void setItemQuantities(List<NameIdQuantity> itemQuantities) {
         this.itemQuantities = itemQuantities;
     }
 
     public BillingRequest() {
     }
 
-    public BillingRequest(BillingTable billingTable, HashMap<String, Integer> itemQuantities) {
+    public BillingRequest(BillingTable billingTable, List<NameIdQuantity> itemQuantities) {
         this.billingTable = billingTable;
         this.itemQuantities = itemQuantities;
     }

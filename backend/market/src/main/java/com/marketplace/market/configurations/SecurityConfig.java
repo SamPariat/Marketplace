@@ -33,8 +33,8 @@ public class SecurityConfig {
 
 		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
 				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/auth/login", "/").permitAll()
-								.requestMatchers("/billing/**", "/category/**", "/item/**", "/user/**").authenticated())
+						auth -> auth.requestMatchers("/auth/**", "/", "/user/**").permitAll()
+								.requestMatchers("/billing/**", "/category/**", "/item/**").authenticated())
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

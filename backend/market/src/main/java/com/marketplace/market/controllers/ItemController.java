@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.marketplace.market.models.Category;
 import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.models.Item;
+import com.marketplace.market.models.ItemSold;
 import com.marketplace.market.services.ItemServices;
+import com.marketplace.market.services.ItemSoldServices;
 import com.marketplace.market.services.CategoryServices;
 
 @RestController
@@ -32,6 +34,9 @@ public class ItemController {
 
 	@Autowired
 	private CategoryServices categoryServices;
+
+	@Autowired
+	private ItemSoldServices itemSoldServices;
 
 	@GetMapping("/all")
 	public ResponseEntity<CustomResponse<List<Item>>> getItems() {
@@ -93,6 +98,45 @@ public class ItemController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new CustomResponse<List<Item>>(null, "Some error occurred while getting the item(s).",
+							e.getMessage()));
+		}
+	}
+
+	@GetMapping("/stock-finishing")
+	public ResponseEntity<CustomResponse<List<Item>>> getStockLessThan10() {
+		try {
+			List<Item> nearOutOfStockItems = itemServices.findByStockLessThan(10);
+
+			if (nearOutOfStockItems.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new CustomResponse<List<Item>>(Collections.emptyList(),
+								"No items going out of stock yet.",
+								null));
+			}
+
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new CustomResponse<List<Item>>(nearOutOfStockItems,
+							"Near out of stock items fetched successfully.",
+							null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new CustomResponse<List<Item>>(null, "Some error occurred while processing.",
+							e.getMessage()));
+		}
+	}
+
+	@GetMapping("/top-items")
+	public ResponseEntity<CustomResponse<List<ItemSold>>> getTopItems() {
+		try {
+			List<ItemSold> topItems = itemSoldServices.findTop7SoldItems();
+
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new CustomResponse<List<ItemSold>>(topItems,
+							"Fetched top items successfully.",
+							null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new CustomResponse<List<ItemSold>>(null, "Some error occurred while processing.",
 							e.getMessage()));
 		}
 	}

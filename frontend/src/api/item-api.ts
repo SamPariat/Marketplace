@@ -51,6 +51,36 @@ export const getItemsByName = async (
   }
 };
 
+export const getStockLessThan10 = async (): Promise<
+  CustomResponse<Array<Item>>
+> => {
+  try {
+    const response: AxiosResponse = await axiosInstance.get(
+      "/item/stock-finishing"
+    );
+
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};
+
+export const getTopItems = async () => {
+  try {
+    const response: AxiosResponse = await axiosInstance.get("/item/top-items");
+
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};
+
 export const addItem = async ({
   item,
   categoryId,

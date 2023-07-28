@@ -1,17 +1,12 @@
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
 
-import { addConsumer } from "../../api/consumer-api";
 import { Consumer } from "../../types/consumer";
-import usePostData from "../../utils/hooks/usePostData";
 import Button from "../buttons/Button";
 import ValidFormInput from "../inputs/ValidFormInput";
 
 const ConsumerValidationSchema = Yup.object({
-  id: Yup.number()
-    .required("Category ID cannot be empty.")
-    .positive("Category ID must be greater than zero.")
-    .typeError("Category ID must be a number."),
   name: Yup.string()
     .required("Category must have a name.")
     .matches(/^[a-zA-Z0-9]+$/, "Item ID can only contain letters and numbers."),
@@ -21,27 +16,29 @@ const ConsumerValidationSchema = Yup.object({
 });
 
 const initialValues: Consumer = {
-  id: 0,
   phoneNo: "",
   name: "",
   address: "",
 };
 
-const AddConsumerForm = () => {
-  const { postData } = usePostData<Consumer, Consumer>(addConsumer);
+type AddConsumerFormProps = {
+  setConsumer: React.Dispatch<React.SetStateAction<Consumer>>;
+};
 
+const AddConsumerForm = ({ setConsumer }: AddConsumerFormProps) => {
   return (
     <div className="flex items-center justify-center font-exo dark:bg-slate-900 rounded-lg py-2">
       <Formik
         initialValues={initialValues}
-        onSubmit={async (value, _actions) => {
-          await postData(value);
+        onSubmit={(value, actions) => {
+          setConsumer(value);
+          toast.info("Saved user details");
+          actions.setSubmitting(false);
         }}
         validationSchema={ConsumerValidationSchema}
       >
-        {({ isValid, isSubmitting }) => (
+        {({ isValid }) => (
           <Form className="text-slate-900 dark:text-slate-200">
-            <ValidFormInput label="Consumer ID" name="id" type="text" />
             <ValidFormInput label="Consumer Name" name="name" type="text" />
             <ValidFormInput
               label="Consumer Address"
@@ -51,12 +48,12 @@ const AddConsumerForm = () => {
             <ValidFormInput
               label="Consumer Phone No"
               name="phoneNo"
-              type="number"
+              type="text"
             />
             <Button
-              text="Submit"
+              text="Save details"
               type="submit"
-              disabled={!isValid || isSubmitting}
+              disabled={!isValid}
             />
           </Form>
         )}

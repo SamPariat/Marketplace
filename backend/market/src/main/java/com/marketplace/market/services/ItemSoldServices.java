@@ -1,5 +1,6 @@
 package com.marketplace.market.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,7 @@ public interface ItemSoldServices extends JpaRepository<ItemSold, Integer> {
     void updateItemSoldById(@Param("id") int id, @Param("quantity") int quantity);
 
     Optional<ItemSold> findByNameAndId(String name, int id);
+
+    @Query("SELECT is FROM ItemSold is ORDER BY is.quantity DESC LIMIT 5")
+    List<ItemSold> findTop7SoldItems();
 }

@@ -41,7 +41,12 @@ const ItemCard = ({
   const handleUpdateQuantityInput = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const newQuantity: number = Number.parseInt(event.target.value);
+    const newQuantityString = event.target.value;
+    if (newQuantityString.length === 0) {
+      setQuantity(0);
+      return;
+    }
+    const newQuantity = Number.parseInt(newQuantityString);
     if (newQuantity >= 0 && newQuantity <= stock) {
       setQuantity(newQuantity);
     } else if (newQuantity < 0) {

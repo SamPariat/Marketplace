@@ -1,10 +1,14 @@
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { addBill } from "../api/billing-api";
 import Button from "../components/buttons/Button";
-import type { Bill, BillRequest } from "../types/bill";
+import type { Bill, BillingRequest } from "../types/bill";
 import usePostData from "../utils/hooks/usePostData";
 import type { Quantity } from "./AddBillFormPage";
+import type { NameIdQuantity } from "../types/name-id-quantity";
+import type { Consumer } from "../types/consumer";
+import AddConsumerForm from "../components/forms/AddConsumerForm";
 
 type LocationStateType = {
   itemAndQty: Quantity;
@@ -14,9 +18,10 @@ type LocationStateType = {
 };
 
 const BillGeneratePage = () => {
+  const [consumer, setConsumer] = useState<Consumer>({} as Consumer);
   const location = useLocation();
-  const { postData } = usePostData<Bill, BillRequest>(addBill);
-  
+  const { postData } = usePostData<Bill, BillingRequest>(addBill);
+
   // Passed from AddBillFormPage -> CalculateCard as props -> BillGeneratePage as state of navigation
   const { itemAndQty, subtotal, total, discount } =
     location.state as LocationStateType;
@@ -31,21 +36,32 @@ const BillGeneratePage = () => {
       (item) => item.qty > 0
     );
 
+    // Generate itemQuantities for the backend request
+    const itemQuantities = [] as Array<NameIdQuantity>;
+    for (const [name, info] of Object.entries(itemAndQty)) {
+      if (info.qty > 0) {
+        itemQuantities.push({ name, itemId: info.itemId, quantity: info.qty });
+      }
+    }
+
     // Get the id's of the items bought by the user
     const items = boughtItems.reduce((prevValue, currValue) => {
       return [...prevValue, { itemId: currValue.itemId }];
     }, [] as Array<{ itemId: number }>);
 
-    await postData({
-      serviceTax: 0,
-      billerId: 0,
-      cgst: gst / 2,
-      sgst: gst / 2,
-      items,
-      discountAmount: discountRupees,
-      discountPercentage: discount,
-      totalAmount: total,
-    });
+    // await postData({
+    //   billingTable: {
+    //     serviceTax: 0,
+    //     billerId: 0,
+    //     cgst: gst / 2,
+    //     sgst: gst / 2,
+    //     items,
+    //     discountAmount: discountRupees,
+    //     discountPercentage: discount,
+    //     totalAmount: total,
+    //   },
+    //   itemQuantities,
+    // });
   };
 
   return (
@@ -85,9 +101,10 @@ const BillGeneratePage = () => {
           </span>
         </div>
       </div>
+      <AddConsumerForm setConsumer={setConsumer} />
       <Button
         text="Save Bill"
-        type="button"
+        type="submit"
         rounded
         clickHandler={submitBillHandler}
       />

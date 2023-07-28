@@ -1,4 +1,5 @@
 import type { Item } from "./item";
+import type { NameIdQuantity } from "./name-id-quantity";
 
 export type Bill = {
   billId?: number;
@@ -19,5 +20,5 @@ export type BillRequest = {
 
 export type BillingRequest = {
   billingTable: BillRequest;
-  itemQuantities: Map<string, number>;
+  itemQuantities: Array<NameIdQuantity>;
 };

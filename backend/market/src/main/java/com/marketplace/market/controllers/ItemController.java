@@ -81,7 +81,6 @@ public class ItemController {
 	public ResponseEntity<CustomResponse<List<Item>>> getItemsByName(@RequestParam("name") String name) {
 		try {
 			List<Item> itemsByName = itemServices.findByNameEquals(name);
-			System.out.println(itemsByName);
 
 			if (itemsByName.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.OK)
@@ -103,9 +102,9 @@ public class ItemController {
 	}
 
 	@GetMapping("/stock-finishing")
-	public ResponseEntity<CustomResponse<List<Item>>> getStockLessThan10() {
+	public ResponseEntity<CustomResponse<List<Item>>> getStockLessThan5() {
 		try {
-			List<Item> nearOutOfStockItems = itemServices.findByStockLessThan(10);
+			List<Item> nearOutOfStockItems = itemServices.findByStockLessThanOrderByStockAsc(5);
 
 			if (nearOutOfStockItems.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.OK)

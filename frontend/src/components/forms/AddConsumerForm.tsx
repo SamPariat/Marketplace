@@ -22,7 +22,7 @@ const initialValues: Consumer = {
 };
 
 type AddConsumerFormProps = {
-  setConsumer: React.Dispatch<React.SetStateAction<Consumer>>;
+  setConsumer?: React.Dispatch<React.SetStateAction<Consumer>>;
 };
 
 const AddConsumerForm = ({ setConsumer }: AddConsumerFormProps) => {
@@ -31,7 +31,7 @@ const AddConsumerForm = ({ setConsumer }: AddConsumerFormProps) => {
       <Formik
         initialValues={initialValues}
         onSubmit={(value, actions) => {
-          setConsumer(value);
+          setConsumer!(value);
           toast.info("Saved user details");
           actions.setSubmitting(false);
         }}

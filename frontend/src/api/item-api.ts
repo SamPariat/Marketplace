@@ -5,6 +5,7 @@ import { axiosInstance } from "./axios-config";
 import type { CustomResponse } from "../types/custom-response";
 import type { AddItemArgs, Item, ItemRequest } from "../types/item";
 import { generateError } from "../utils";
+import { ItemSold } from "../types/item-sold";
 
 export const getItems = async (): Promise<CustomResponse<Array<Item>>> => {
   try {
@@ -51,7 +52,7 @@ export const getItemsByName = async (
   }
 };
 
-export const getStockLessThan10 = async (): Promise<
+export const getStockLessThan5 = async (): Promise<
   CustomResponse<Array<Item>>
 > => {
   try {
@@ -68,7 +69,9 @@ export const getStockLessThan10 = async (): Promise<
   }
 };
 
-export const getTopItems = async () => {
+export const getTopItems = async (): Promise<
+  CustomResponse<Array<ItemSold>>
+> => {
   try {
     const response: AxiosResponse = await axiosInstance.get("/item/top-items");
 

@@ -21,6 +21,6 @@ public interface ItemServices extends JpaRepository<Item, Integer> {
 
 	List<Item> findByNameEquals(@Param("name") String name);
 
-	List<Item> findByStockLessThan(@Param("stock") int stock);
+	List<Item> findByStockLessThanOrderByStockAsc(@Param("stock") int stock);
 
 }

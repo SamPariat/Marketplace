@@ -16,6 +16,7 @@ import BillGenerate from "./pages/BillGeneratePage";
 import BillingPage from "./pages/BillingPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import CategoryDetailsPage from "./pages/CategoryDetailsPage";
+import HomePage, { loader as homePageLoader } from "./pages/HomePage";
 import ItemDetailsPage from "./pages/ItemDetailsPage";
 import ItemsPage from "./pages/ItemsPage";
 import LoginPage from "./pages/LoginPage";
@@ -38,6 +39,17 @@ const App = () => {
       path: "/",
       element: <MainPage />,
       children: [
+        {
+          index: true,
+          element: (
+            <Navigate to={`${user.token === undefined ? "/login" : "/home"}`} />
+          ),
+        },
+        {
+          path: "/home",
+          element: <HomePage />,
+          loader: homePageLoader,
+        },
         {
           path: "billing",
           children: [

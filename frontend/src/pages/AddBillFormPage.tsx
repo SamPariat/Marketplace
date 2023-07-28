@@ -7,6 +7,7 @@ import BillItem from "../components/cards/BillItem";
 import CalculateCard from "../components/cards/CalculateCard";
 import ItemList from "../components/cards/ItemList";
 import type { Item } from "../types/item";
+import type { CustomResponse } from "../types/custom-response";
 
 export type Quantity = {
   [key: string]: {
@@ -18,7 +19,9 @@ export type Quantity = {
 };
 
 const AddBillFormPage = () => {
-  const { items } = useLoaderData() as { items: Array<Item> | null };
+  const { items } = useLoaderData() as {
+    items: CustomResponse<Array<Item>> | null;
+  };
   const [itemAndQty, setItemAndQty] = useState<Quantity>({} as Quantity);
   const [filter, setFilter] = useState<string>("");
 

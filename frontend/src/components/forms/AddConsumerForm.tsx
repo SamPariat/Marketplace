@@ -1,37 +1,34 @@
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 
-import { addConsumer} from "../../api/consumer-api";
-import usePostData from "../../utils/hooks/usePostData";
-import Button from "../buttons/Button";
-import ValidFormInput from "../inputs/ValidFormInput";
+import { addConsumer } from "../../api/consumer-api";
 import { Consumer } from "../../types/consumer";
-
+import usePostData from "../../utils/hooks/usePostData";
+import ValidFormInput from "../inputs/ValidFormInput";
 
 const ConsumerValidationSchema = Yup.object({
-  id: Yup.number()
-    .required("Category ID cannot be empty.")
-    .positive("Category ID must be greater than zero.")
-    .typeError("Category ID must be a number."),
   name: Yup.string()
     .required("Category must have a name.")
-    .matches(/^[a-zA-Z0-9]+$/, "Item ID can only contain letters and numbers."),
+    .matches(/^[a-zA-Z0-9 ]+$/, "Name can only contain letters."),
+  address: Yup.string()
+    .required("Category ID cannot be empty.")
+    .matches(/^[a-zA-Z0-9 ]+$/, "Name can only contain letters."),
   phoneNo: Yup.string()
     .required("Consumer must have phone number.")
-    .matches(/^[0-9]{10}$/, "Enter a valid 10-digit phone number."),});
+    .matches(/^[0-9]{10}$/, "Enter a valid 10-digit phone number."),
+});
 
 const initialValues: Consumer = {
-  id: 0,
-  phoneNo:"",
+  phoneNo: "",
   name: "",
-  address:"",
+  address: "",
 };
 
 const AddConsumerForm = () => {
   const { postData } = usePostData<Consumer, Consumer>(addConsumer);
 
   return (
-    <div className="flex items-center justify-center font-exo dark:bg-slate-900 rounded-lg py-2">
+    <div className="flex items-center justify-center font-exo dark:bg-slate-800 rounded-lg py-2">
       <Formik
         initialValues={initialValues}
         onSubmit={async (value, _actions) => {
@@ -39,17 +36,20 @@ const AddConsumerForm = () => {
         }}
         validationSchema={ConsumerValidationSchema}
       >
-        {({ isValid, isSubmitting }) => (
+        {() => (
           <Form className="text-slate-900 dark:text-slate-200">
-            <ValidFormInput label="Consumer ID" name="id" type="text" />
             <ValidFormInput label="Consumer Name" name="name" type="text" />
-            <ValidFormInput label="Consumer Address" name="address" type="text" />
-            <ValidFormInput label="Consumer Phone No" name="phoneNo" type="number" />
-            <Button
-              text="Submit"
-              type="submit"
-              disabled={!isValid || isSubmitting}
+            <ValidFormInput
+              label="Consumer Address"
+              name="address"
+              type="text"
             />
+            <ValidFormInput
+              label="Consumer Phone No"
+              name="phoneNo"
+              type="number"
+            />
+            
           </Form>
         )}
       </Formik>

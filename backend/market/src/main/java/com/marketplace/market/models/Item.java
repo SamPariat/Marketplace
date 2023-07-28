@@ -124,4 +124,9 @@ public class Item {
 				+ "]";
 	}
 
+	public String getSupplier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

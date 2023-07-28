@@ -1,6 +1,7 @@
 package com.marketplace.market.models;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,9 +22,9 @@ public class ItemSold {
     private int quantity;
 
     @Column(nullable = false)
-    private int soldBy;
+    private String soldBy;
 
-    private Timestamp timestamp;
+    private LocalDateTime timestamp;
 
     public int getId() {
         return id;
@@ -49,31 +50,31 @@ public class ItemSold {
         this.quantity = quantity;
     }
 
-    public int getSoldBy() {
+    public String getSoldBy() {
         return soldBy;
     }
 
-    public void setSoldBy(int soldBy) {
+    public void setSoldBy(String soldBy) {
         this.soldBy = soldBy;
     }
 
-    public Timestamp getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
     public ItemSold() {
     }
 
-    public ItemSold(int id, String name, int quantity, int soldBy, Timestamp timestamp) {
+    public ItemSold(int id, String name, int quantity, String itemSupplier, LocalDateTime localDateTime) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
-        this.soldBy = soldBy;
-        this.timestamp = timestamp;
+        this.soldBy = itemSupplier;
+        this.timestamp = localDateTime;
     }
 
     @Override

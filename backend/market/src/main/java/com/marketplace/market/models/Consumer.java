@@ -1,24 +1,26 @@
 package com.marketplace.market.models;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Consumer {
 	
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Id
 	int id;
+	@Id
 	String phoneNo;
 	String name;
 	String address;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	private BillingTable bills;
+	@OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL)
+    private List<BillingTable> bills;
 	
 	public int getId() {
 		return id;

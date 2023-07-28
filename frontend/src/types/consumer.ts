@@ -1,5 +1,5 @@
 export type Consumer = {
-    id: number;
+    id?: number;
     name: string;
     phoneNo: string;
     address: string;

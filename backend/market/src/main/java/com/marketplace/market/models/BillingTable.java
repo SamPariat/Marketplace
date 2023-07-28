@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class BillingTable {
@@ -45,6 +46,9 @@ public class BillingTable {
 					@JoinColumn(name = "item_id") })
 	private Set<Item> items;
 
+	@ManyToOne
+    private Consumer consumer;
+	
 	public BillingTable() {
 		super();
 	}

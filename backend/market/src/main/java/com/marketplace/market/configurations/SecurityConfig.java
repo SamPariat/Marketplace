@@ -36,7 +36,7 @@ public class SecurityConfig {
 						auth -> auth.requestMatchers("/auth/**", "/", "/user/**").permitAll()
 								.requestMatchers("/billing/**", "/category/**", "/item/**").authenticated())
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).logout((logout) -> logout.logoutUrl("/logout"));
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}

@@ -1,5 +1,6 @@
 package com.marketplace.market.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.marketplace.market.models.Category;
 import com.marketplace.market.models.CustomResponse;
+import com.marketplace.market.models.ItemsPerCategory;
 import com.marketplace.market.services.CategoryServices;
 
 @RestController
@@ -63,6 +65,32 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new CustomResponse<Category>(null, "Some error occurred while getting the category.",
                             e.getMessage()));
+        }
+    }
+
+    @GetMapping(path = "/items-per-category")
+    public ResponseEntity<CustomResponse<List<ItemsPerCategory>>> getItemsPerCategory() {
+        try {
+            List<Category> categories = categoryServices.findAll();
+
+            if (categories.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new CustomResponse<List<ItemsPerCategory>>(null, "No data present.", null));
+            }
+
+            List<ItemsPerCategory> itemsPerCategory = new ArrayList<ItemsPerCategory>();
+
+            for (Category category : categories) {
+                itemsPerCategory.add(new ItemsPerCategory(category.getName(), category.getItems().size()));
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(new CustomResponse<List<ItemsPerCategory>>(
+                    itemsPerCategory, "Successfully fetch items per category.", null));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new CustomResponse<List<ItemsPerCategory>>(null,
+                            "Some error occurred while fetching the categories.", e.getMessage()));
         }
     }
 

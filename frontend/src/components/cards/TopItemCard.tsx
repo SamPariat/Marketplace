@@ -6,7 +6,7 @@ type TopItemCardProps = {
 
 const TopItemCard = ({ topItems }: TopItemCardProps) => {
   return (
-    <div className="flex flex-col shadow-md mx-4">
+    <div className="flex flex-col mx-4 px-4 py-2">
       <h1 className="text-xl font-bold text-center my-4">Top {topItems.length} items sold</h1>
       <table className="table-auto border-separate border border-slate-500 text-sm">
         <thead>

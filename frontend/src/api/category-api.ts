@@ -1,7 +1,8 @@
 import { AxiosError, AxiosResponse } from "axios";
 
-import { Category } from "../types/category";
-import { CustomResponse } from "../types/custom-response";
+import type { Category } from "../types/category";
+import type { CustomResponse } from "../types/custom-response";
+import type { ItemsPerCategory } from "../types/items-per-category";
 import { generateError } from "../utils";
 import { axiosInstance } from "./axios-config";
 
@@ -24,6 +25,23 @@ export const getCategory = async (categoryId: number) => {
   try {
     const response: AxiosResponse = await axiosInstance.get(
       `/category/${categoryId}`
+    );
+
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};
+
+export const getItemsPerCategory = async (): Promise<
+  CustomResponse<Array<ItemsPerCategory>>
+> => {
+  try {
+    const response: AxiosResponse = await axiosInstance.get(
+      "/category/items-per-category"
     );
 
     return response.data;

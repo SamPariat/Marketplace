@@ -49,19 +49,19 @@ const BillGeneratePage = () => {
       return [...prevValue, { itemId: currValue.itemId }];
     }, [] as Array<{ itemId: number }>);
 
-    // await postData({
-    //   billingTable: {
-    //     serviceTax: 0,
-    //     billerId: 0,
-    //     cgst: gst / 2,
-    //     sgst: gst / 2,
-    //     items,
-    //     discountAmount: discountRupees,
-    //     discountPercentage: discount,
-    //     totalAmount: total,
-    //   },
-    //   itemQuantities,
-    // });
+    await postData({
+      billingTable: {
+        serviceTax: 0,
+        billerId: 0,
+        cgst: gst / 2,
+        sgst: gst / 2,
+        items,
+        discountAmount: discountRupees,
+        discountPercentage: discount,
+        totalAmount: total,
+      },
+      itemQuantities,
+    });
   };
 
   return (

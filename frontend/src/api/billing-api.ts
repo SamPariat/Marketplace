@@ -1,7 +1,8 @@
 import { AxiosError, AxiosResponse } from "axios";
 
-import type { Bill, BillRequest, BillingRequest } from "../types/bill";
+import type { Bill, BillingRequest } from "../types/bill";
 import type { CustomResponse } from "../types/custom-response";
+import { SalesPerDate } from "../types/sales-per-date";
 import { generateError } from "../utils";
 import { axiosInstance } from "./axios-config";
 
@@ -51,6 +52,23 @@ export const getBill = async (itemId: number) => {
 export const getAllBills = async (): Promise<CustomResponse<Array<Bill>>> => {
   try {
     const response: AxiosResponse = await axiosInstance.get("/billing/bills");
+
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(generateError(e.response!));
+    }
+    throw new Error("Some error occurred.");
+  }
+};
+
+export const getSalesPerDay = async (): Promise<
+  CustomResponse<Array<SalesPerDate>>
+> => {
+  try {
+    const response: AxiosResponse = await axiosInstance.get(
+      "billing/sales-per-day"
+    );
 
     return response.data;
   } catch (e) {

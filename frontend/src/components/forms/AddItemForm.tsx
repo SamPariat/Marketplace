@@ -46,7 +46,7 @@ const initialValues = {
   discountPer: 0,
   costPrice: 0,
   supplier: "",
-  categoryId: "",
+  categoryId: "1",
 };
 
 const AddItemForm = () => {
@@ -75,6 +75,7 @@ const AddItemForm = () => {
           });
         }}
         validationSchema={itemValidationSchema}
+        enableReinitialize
       >
         {({ isValid, isSubmitting }) => (
           <Form className="text-slate-900 dark:text-slate-200">

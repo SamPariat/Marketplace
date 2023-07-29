@@ -31,7 +31,7 @@ const SideBar = () => {
         </span>
       </div>
       <div className="mt-10">
-        <SideBarLinks icon={TbHomeDot} text="Home" linkTo="" />
+        <SideBarLinks icon={TbHomeDot} text="Home" linkTo="/home" />
         <SideBarLinks icon={BiCategory} text="Categories" linkTo="categories" />
         {user.token && (isAdmin || isInventoryManager) && (
           <SideBarLinks icon={FiShoppingCart} text="Items" linkTo="items" />

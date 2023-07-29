@@ -67,6 +67,7 @@ export const userSlice = createSlice({
       localStorage.removeItem(reduxState);
     },
     loadUserState: (state, action) => {
+      localStorage.removeItem(reduxState);
       if (action.payload) {
         if (hasTokenExpired(action.payload.token)) {
           return;

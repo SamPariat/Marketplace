@@ -7,8 +7,8 @@ const Profile = () => {
   const user = useAppSelector((state: RootState) => state.user);
 
   return (
-    <div className="flex flex-grow font-exo m-auto">
-      <div className="grid grid-cols-3">
+    <div className="flex flex-grow font-raleway">
+      <div className="grid grid-cols-3 m-auto">
         <div className="grid justify-center items-center col-span-1  ">
           <img src={userImg} alt="userImage" className="w-48 pt-20" />
         </div>
@@ -17,11 +17,6 @@ const Profile = () => {
             <h1 className="text-4xl font-Raleway text-slate-900 dark:text-slate-200">
               Profile
             </h1>
-            <div className="grid grid-cols-3">
-              <button className="bg-transparent dark:bg-slate-500 hover:bg-slate-700 dark:hover:bg-slate-600 text-slate-900 dark:text-slate-200 font-semibold hover:text-white py-2 px-4 border border-slate-500 hover:border-transparent rounded col-span-1 ">
-                Edit Profile
-              </button>
-            </div>
           </div>
           <div className="w-full max-w-lg">
             <form action="">
@@ -68,9 +63,6 @@ const Profile = () => {
                   readOnly
                 />
               </div>
-              <button className="bg-slate-700 dark:bg-slate-500 hover:bg-slate-900 dark:hover:bg-slate-700 text-white font-bold py-2 px-7 border border-slate-500 rounded ">
-                Save
-              </button>
             </form>
           </div>
         </div>

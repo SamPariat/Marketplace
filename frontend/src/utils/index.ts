@@ -18,5 +18,6 @@ export const handleError = (e: unknown) => {
 export const hasTokenExpired = (tokenAsIsoString: string): boolean => {
   const tokenDate = new Date(tokenAsIsoString);
   const currentDate = new Date();
+  console.log(currentDate.getMilliseconds(), tokenDate.getMilliseconds())
   return currentDate.getMilliseconds() - tokenDate.getMilliseconds() > fiveHrs;
 };

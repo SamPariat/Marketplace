@@ -25,6 +25,7 @@ import com.marketplace.market.models.CustomResponse;
 import com.marketplace.market.models.Item;
 import com.marketplace.market.models.ItemSold;
 import com.marketplace.market.models.NameIdQuantity;
+import com.marketplace.market.models.SalesPerDate;
 import com.marketplace.market.services.BillingTableServices;
 import com.marketplace.market.services.ItemServices;
 import com.marketplace.market.services.ItemSoldServices;
@@ -40,6 +41,25 @@ public class BillingController {
 
 	@Autowired
 	private ItemSoldServices itemSoldServices;
+
+	private void saveToSoldItem(List<NameIdQuantity> boughtItemsInfo) {
+		for (NameIdQuantity niq : boughtItemsInfo) {
+			String itemName = niq.getName();
+			int itemId = niq.getItemId();
+			int quantity = niq.getQuantity();
+
+			Optional<ItemSold> existingItem = itemSoldServices.findByNameAndId(itemName, itemId);
+
+			if (!existingItem.isPresent()) {
+				String itemSupplier = itemServices.findById(itemId).get().getSupplier();
+				itemSoldServices.save(new ItemSold(itemId, itemName, quantity, itemSupplier, LocalDateTime.now()));
+			} else {
+				System.out.println(existingItem.get().getQuantity());
+				int newQty = existingItem.get().getQuantity() + quantity;
+				itemSoldServices.updateItemSoldById(itemId, newQty);
+			}
+		}
+	}
 
 	@GetMapping("/time")
 	public LocalDateTime time() {
@@ -66,7 +86,6 @@ public class BillingController {
 	@GetMapping("/bills")
 	public ResponseEntity<CustomResponse<List<BillingTable>>> getAllBills() {
 		try {
-
 			List<BillingTable> bills = billingService.findAll();
 
 			if (bills.isEmpty()) {
@@ -80,6 +99,24 @@ public class BillingController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<List<BillingTable>>(
 					null, "Some error occurred while fetching the bills.", e.getMessage()));
+		}
+	}
+
+	@GetMapping("/sales-per-day")
+	public ResponseEntity<CustomResponse<List<SalesPerDate>>> getSalesPerDay() {
+		try {
+			List<SalesPerDate> salesPerDate = billingService.salesGroupedByDate();
+
+			if (salesPerDate.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK).body(
+						new CustomResponse<List<SalesPerDate>>(Collections.emptyList(), "No sales yet.", null));
+			}
+
+			return ResponseEntity.status(HttpStatus.OK).body(
+					new CustomResponse<List<SalesPerDate>>(salesPerDate, "Fetched sales succesfully.", null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomResponse<List<SalesPerDate>>(
+					null, "Some error occurred while fetching the sales.", e.getMessage()));
 		}
 	}
 
@@ -113,28 +150,10 @@ public class BillingController {
 								"Cannot find the following items: " + notFoundIds));
 			}
 
-			for (NameIdQuantity niq : boughtItemsInfo) {
-				String itemName = niq.getName();
-				int itemId = niq.getItemId();
-				int quantity = niq.getQuantity();
-
-				Optional<ItemSold> existingItem = itemSoldServices.findByNameAndId(itemName, itemId);
-
-				if (!existingItem.isPresent()) {
-					String itemSupplier = itemServices.findById(itemId).get().getSupplier();
-					itemSoldServices.save(new ItemSold(itemId, itemName, quantity, itemSupplier, LocalDateTime.now()));
-				} else {
-					int newQty = existingItem.get().getQuantity() + quantity;
-					existingItem.get().setQuantity(quantity);
-					itemSoldServices.updateItemSoldById(itemId, newQty);
-				}
-			}
-
 			bill.setTimeStamp(LocalDateTime.now());
 			bill.setItems(items);
-			billingService.save(bill);
-			bill.setTimeStamp(LocalDateTime.now());
-			bill.setItems(items);
+			saveToSoldItem(boughtItemsInfo);
+			System.out.println(bill);
 			billingService.save(bill);
 
 			return ResponseEntity.status(HttpStatus.OK)

@@ -6,7 +6,7 @@ type LowStockItemCardProps = {
 
 const LowStockItemCard = ({ lowStockItems }: LowStockItemCardProps) => {
   return (
-    <div className="flex flex-col shadow-md mx-4">
+    <div className="flex flex-col mx-4 px-4 py-2">
       <h1 className="text-xl font-bold text-center my-4">
         List of items almost out of stock
       </h1>

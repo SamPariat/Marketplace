@@ -1,14 +1,11 @@
-import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { addBill } from "../api/billing-api";
 import Button from "../components/buttons/Button";
 import type { Bill, BillingRequest } from "../types/bill";
+import type { NameIdQuantity } from "../types/name-id-quantity";
 import usePostData from "../utils/hooks/usePostData";
 import type { Quantity } from "./AddBillFormPage";
-import type { NameIdQuantity } from "../types/name-id-quantity";
-import type { Consumer } from "../types/consumer";
-import AddConsumerForm from "../components/forms/AddConsumerForm";
 
 type LocationStateType = {
   itemAndQty: Quantity;
@@ -18,7 +15,7 @@ type LocationStateType = {
 };
 
 const BillGeneratePage = () => {
-  const [consumer, setConsumer] = useState<Consumer>({} as Consumer);
+  // const [consumer, setConsumer] = useState<Consumer>({} as Consumer);
   const location = useLocation();
   const { postData } = usePostData<Bill, BillingRequest>(addBill);
 
@@ -101,7 +98,7 @@ const BillGeneratePage = () => {
           </span>
         </div>
       </div>
-      <AddConsumerForm setConsumer={setConsumer} />
+      {/* <AddConsumerForm setConsumer={setConsumer} /> */}
       <Button
         text="Save Bill"
         type="submit"

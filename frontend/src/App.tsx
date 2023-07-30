@@ -115,8 +115,24 @@ const App = () => {
         {
           path: "categories",
           children: [
-            { index: true, element: <CategoriesPage /> },
-            { path: ":categoryId", element: <CategoryDetailsPage /> },
+            {
+              index: true,
+              element: (
+                <Protect
+                  element={<CategoriesPage />}
+                  isAuth={isAdmin || isInventoryManager}
+                />
+              ),
+            },
+            {
+              path: ":categoryId",
+              element: (
+                <Protect
+                  element={<CategoryDetailsPage />}
+                  isAuth={isAdmin || isInventoryManager}
+                />
+              ),
+            },
           ],
         },
         {

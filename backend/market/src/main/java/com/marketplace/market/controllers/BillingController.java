@@ -54,10 +54,14 @@ public class BillingController {
 				String itemSupplier = itemServices.findById(itemId).get().getSupplier();
 				itemSoldServices.save(new ItemSold(itemId, itemName, quantity, itemSupplier, LocalDateTime.now()));
 			} else {
-				System.out.println(existingItem.get().getQuantity());
 				int newQty = existingItem.get().getQuantity() + quantity;
 				itemSoldServices.updateItemSoldById(itemId, newQty);
 			}
+
+			Item item = itemServices.findById(itemId).get();
+			int newItemQty = item.getStock() - quantity;
+			itemServices.updateItemById(itemId, item.getPrice(), item.getName(), newItemQty, item.isActive(),
+					item.getDiscountPer(), item.getCostPrice(), item.getSupplier());
 		}
 	}
 
@@ -153,7 +157,7 @@ public class BillingController {
 			bill.setTimeStamp(LocalDateTime.now());
 			bill.setItems(items);
 			saveToSoldItem(boughtItemsInfo);
-			System.out.println(bill);
+			System.out.println(items);
 			billingService.save(bill);
 
 			return ResponseEntity.status(HttpStatus.OK)

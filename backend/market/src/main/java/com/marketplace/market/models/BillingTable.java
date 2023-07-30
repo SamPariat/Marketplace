@@ -39,7 +39,7 @@ public class BillingTable {
 
 	private int billerId;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name = "billing_table_items", joinColumns = {
 			@JoinColumn(name = "billing_table_id") }, inverseJoinColumns = {
 					@JoinColumn(name = "item_id") })

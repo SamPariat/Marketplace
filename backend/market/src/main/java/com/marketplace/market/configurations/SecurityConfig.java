@@ -33,10 +33,11 @@ public class SecurityConfig {
 
 		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
 				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/auth/**", "/", "/user/**").permitAll()
+						auth -> auth.requestMatchers("/auth/**", "/", "/user/**", "/logout").permitAll()
 								.requestMatchers("/billing/**", "/category/**", "/item/**").authenticated())
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).logout((logout) -> logout.logoutUrl("/logout"));
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.logout((logout) -> logout.logoutUrl("/logout").invalidateHttpSession(true));
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}

@@ -19,7 +19,7 @@ const SalesPerDay = () => {
       <LineChart data={salesPerDay} width={750} height={350}>
         <Tooltip />
         <XAxis dataKey="date" />
-        <YAxis />
+        <YAxis width={100} />
         <Line dataKey="sales" fill="#38bdf8" width={1} />
       </LineChart>
     </div>

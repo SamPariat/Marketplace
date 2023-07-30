@@ -32,15 +32,23 @@ const SideBar = () => {
       </div>
       <div className="mt-10">
         <SideBarLinks icon={TbHomeDot} text="Home" linkTo="/home" />
-        <SideBarLinks icon={BiCategory} text="Categories" linkTo="categories" />
+        {user.token && (isAdmin || isInventoryManager) && (
+          <SideBarLinks
+            icon={BiCategory}
+            text="Categories"
+            linkTo="categories"
+          />
+        )}
         {user.token && (isAdmin || isInventoryManager) && (
           <SideBarLinks icon={FiShoppingCart} text="Items" linkTo="items" />
         )}
-        <SideBarLinks
-          icon={FaIndianRupeeSign}
-          text="Billing"
-          linkTo="billing"
-        />
+        {user.token && (isAdmin || isBiller) && (
+          <SideBarLinks
+            icon={FaIndianRupeeSign}
+            text="Billing"
+            linkTo="billing"
+          />
+        )}
         <SideBarLinks icon={CgProfile} text="Profile" linkTo="profile" />
       </div>
       <div className="absolute bottom-0">

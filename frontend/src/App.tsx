@@ -42,7 +42,7 @@ const App = () => {
       errorElement: <Error />,
       children: [
         {
-          path: "/home",
+          path: "home",
           element: (
             <Protect
               element={<HomePage />}

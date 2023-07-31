@@ -157,13 +157,11 @@ public class BillingController {
 			bill.setTimeStamp(LocalDateTime.now());
 			bill.setItems(items);
 			saveToSoldItem(boughtItemsInfo);
-			System.out.println(items);
 			billingService.save(bill);
 
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new CustomResponse<BillingTable>(bill, "Successfully added the bill.", null));
 		} catch (Exception e) {
-			System.out.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
 					new CustomResponse<BillingTable>(null, "Some error occurred while trying to save the bill.",
 							e.getMessage()));

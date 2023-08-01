@@ -10,6 +10,8 @@ public class LoginResponse {
 
 	private String name;
 
+	private int id;
+
 	public String getJwtToken() {
 		return jwtToken;
 	}
@@ -46,16 +48,26 @@ public class LoginResponse {
 		this.name = name;
 	}
 
-	@Override
-	public String toString() {
-		return "LoginResponse [jwtToken=" + jwtToken + ", email=" + email + ", role=" + role + ", name=" + name + "]";
+	public int getId() {
+		return id;
 	}
 
-	public LoginResponse(String jwtToken, String email, String role, String name) {
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "LoginResponse [jwtToken=" + jwtToken + ", email=" + email + ", role=" + role + ", name=" + name
+				+ ", id=" + id + "]";
+	}
+
+	public LoginResponse(String jwtToken, String email, String role, String name, int id) {
 		this.jwtToken = jwtToken;
 		this.email = email;
 		this.role = role;
 		this.name = name;
+		this.id = id;
 	}
 
 	public LoginResponse() {
@@ -67,6 +79,7 @@ public class LoginResponse {
 		private String email;
 		private String role;
 		private String name;
+		private int id;
 
 		public Builder jwtToken(String jwtToken) {
 			this.jwtToken = jwtToken;
@@ -88,12 +101,18 @@ public class LoginResponse {
 			return this;
 		}
 
+		public Builder id(int id) {
+			this.id = id;
+			return this;
+		}
+
 		public LoginResponse build() {
 			LoginResponse jwtResponse = new LoginResponse();
 			jwtResponse.setJwtToken(jwtToken);
 			jwtResponse.setEmail(email);
 			jwtResponse.setRole(role);
 			jwtResponse.setName(name);
+			jwtResponse.setId(id);
 			return jwtResponse;
 		}
 	}

@@ -14,6 +14,7 @@ export interface UserState {
   error: string | undefined;
   role: string | undefined;
   name: string | undefined;
+  id: number | undefined;
   tokenIssuingTime: string | undefined;
 }
 
@@ -24,6 +25,7 @@ const initialState: UserState = {
   error: undefined,
   role: undefined,
   name: undefined,
+  id: undefined,
   tokenIssuingTime: undefined,
 };
 
@@ -40,8 +42,8 @@ export const loginUser = createAsyncThunk(
 
       toast.success(response.message);
 
-      const { username, jwtToken, role, name } = response.data;
-      return { email: username, jwtToken, role, name };
+      const { username, jwtToken, role, name, id } = response.data;
+      return { email: username, jwtToken, role, name, id };
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -76,6 +78,7 @@ export const userSlice = createSlice({
         state.token = action.payload.token;
         state.role = action.payload.role;
         state.name = action.payload.name;
+        state.id = action.payload.id;
         axiosInstance.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${action.payload.token}`;
@@ -92,6 +95,7 @@ export const userSlice = createSlice({
       state.token = action.payload?.jwtToken;
       state.role = action.payload?.role;
       state.name = action.payload?.name;
+      state.id = action.payload?.id;
       state.tokenIssuingTime = new Date().toISOString();
       axiosInstance.defaults.headers.common[
         "Authorization"
@@ -105,6 +109,7 @@ export const userSlice = createSlice({
           token: action.payload?.jwtToken,
           role: action.payload?.role,
           name: action.payload?.name,
+          id: action.payload?.id,
         })
       );
     });

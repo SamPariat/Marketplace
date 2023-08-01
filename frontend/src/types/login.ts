@@ -9,4 +9,5 @@ export type LoginResponse = {
   role: string;
   email: string;
   name: string;
+  id: number;
 };

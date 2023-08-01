@@ -57,7 +57,8 @@ public class AuthController {
 
             LoginResponse response = LoginResponse.builder()
                     .jwtToken(token)
-                    .email(userDetails.getUsername()).role(user.getRole()).name(user.getName()).build();
+                    .email(userDetails.getUsername()).role(user.getRole()).name(user.getName()).id(user.getId())
+                    .build();
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new CustomResponse<LoginResponse>(response, "User logged in successfully.", null));

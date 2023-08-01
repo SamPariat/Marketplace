@@ -6,6 +6,8 @@ import type { Bill, BillingRequest } from "../types/bill";
 import type { NameIdQuantity } from "../types/name-id-quantity";
 import usePostData from "../utils/hooks/usePostData";
 import type { Quantity } from "./AddBillFormPage";
+import { useAppSelector } from "../utils/hooks/useAppSelector";
+import { RootState } from "../redux";
 
 type LocationStateType = {
   itemAndQty: Quantity;
@@ -16,6 +18,7 @@ type LocationStateType = {
 
 const BillGeneratePage = () => {
   // const [consumer, setConsumer] = useState<Consumer>({} as Consumer);
+  const userId = useAppSelector((state: RootState) => state.user.id);
   const location = useLocation();
   const { postData } = usePostData<Bill, BillingRequest>(addBill);
 
@@ -49,7 +52,7 @@ const BillGeneratePage = () => {
     await postData({
       billingTable: {
         serviceTax: 0,
-        billerId: 0,
+        billerId: userId!,
         cgst: gst / 2,
         sgst: gst / 2,
         items,
